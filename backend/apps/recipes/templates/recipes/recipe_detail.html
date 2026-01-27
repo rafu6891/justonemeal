@@ -1,0 +1,8 @@
+<h1>{{ recipe.title }}</h1>
+<p>Para {{servings}} persona(s)</p>
+
+<ul>
+    {% for ing in ingredients %}
+        <li>{{ ing.quantity }} {{ing.unit}} {{ing.name}}</li>
+    {% endfor %}
+</ul>
