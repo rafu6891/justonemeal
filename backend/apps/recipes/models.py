@@ -25,5 +25,8 @@ class RecipeIngredient(models.Model):
     Ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
     quantity = models.FloatField() #cantidad para 1 persona
 
+    def quantity_for(self, servings): # para multiplicar cantidades para mas personas
+        return self.quantity * servings
+    
     def __str__(self):
         return f"{self.quantity} {self.Ingredient.unit} {self.Ingredient.name}"
