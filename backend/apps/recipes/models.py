@@ -1,5 +1,15 @@
 from django.db import models
 
+DISCRETE_UNITS = {
+    "unidad", "u", "pieza", "diente", "rodaja", "hoja", "filete"
+}
+
+FRACTIONS = {
+    0.25: "1/4",
+    0.5: "1/2",
+    0.75: "3/4",
+}
+
 #models de recetas, lo basico
 class Recipe(models.Model):
     title = models.CharField(max_length=200) #nombre de la receta
@@ -31,7 +41,20 @@ class RecipeIngredient(models.Model):
 
     def quantity_for(self, servings): # para multiplicar cantidades para mas personas y redondear las cantidades
         value = self.quantity * servings
-        return round(value, 1)
+
+        unit = self.ingredient.unit.lower()
+
+        if unit in DISCRETE_UNITS:
+            integer = int(value)
+            decimal = round(value - integer, 2)
+
+            if decimal in FRACTIONS:
+                fraction = FRACTIONS[decimal]
+                return f"{integer}{fraction}" if integer > 0 else fraction
+            
+            return str(round(value,2)).rstrip("0").rstrip(".")
+        
+        return str(round(value, 1))
     
     def __str__(self):
         return f"{self.quantity} {self.Ingredient.unit} {self.Ingredient.name}"
