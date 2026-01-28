@@ -3,7 +3,13 @@ from .models import Recipe
 
 
 def recipe_detail(request, recipe_id):
-    servings = int(request.GET.get("servings", 1))
+    try:
+        servings = int(request.GET.get("servings", 1))
+    except ValueError:
+        servings = 1
+    
+    servings = max(1, min(servings, 6))
+
     recipe = get_object_or_404(Recipe, id=recipe_id)
 
     ingredients = []
