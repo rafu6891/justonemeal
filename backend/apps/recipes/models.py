@@ -25,6 +25,7 @@ class Recipe(models.Model):
 class Ingredient(models.Model):
     name = models.CharField(max_length=100)
     unit = models.CharField(max_length=20) #para las unidades de medida
+    to_taste = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
@@ -40,6 +41,9 @@ class RecipeIngredient(models.Model):
     quantity = models.FloatField() #cantidad para 1 persona
 
     def quantity_for(self, servings): # para multiplicar cantidades para mas personas y redondear las cantidades
+        if self.ingredient.to_taste:
+            return "al gusto"
+        
         value = self.quantity * servings
         unit = self.ingredient.unit.lower()
 
