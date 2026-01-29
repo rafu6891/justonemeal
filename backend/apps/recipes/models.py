@@ -41,10 +41,13 @@ class RecipeIngredient(models.Model):
 
     def quantity_for(self, servings): # para multiplicar cantidades para mas personas y redondear las cantidades
         value = self.quantity * servings
-
         unit = self.ingredient.unit.lower()
 
         if unit in DISCRETE_UNITS:
+            
+            if 0 < value < 1:
+                return "1"
+            
             integer = int(value)
             decimal = round(value - integer, 2)
 
