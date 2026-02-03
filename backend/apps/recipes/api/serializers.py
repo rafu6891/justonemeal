@@ -13,3 +13,9 @@ class RecipeDetailSerializer(serializers.Serializer):
     difficulty = serializers.CharField()
     servings = serializers.IntegerField()
     ingredients = IngredientOutputSerializer(many=True)
+
+class RecipeListSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    title = serializers.CharField()
+    time_minutes = serializers.IntegerField()
+    difficulty = serializers.CharField()

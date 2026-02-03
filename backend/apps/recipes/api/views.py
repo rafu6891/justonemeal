@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 
 from apps.recipes.models import Recipe
-from .serializers import RecipeDetailSerializer
+from .serializers import RecipeDetailSerializer, RecipeListSerializer
 
 class RecipeDetailAPIView(APIView):
     def get(self, request, recipe_id):
@@ -34,4 +34,21 @@ class RecipeDetailAPIView(APIView):
         }
 
         serializer = RecipeDetailSerializer(data)
+        return Response(serializer.data)
+    
+class RecipeListAPIView(APIView):
+    def get(self, request):
+        recipes = Recipe.objects.all().order_by("title")
+
+        data = [
+            {
+                "id": recipe.id,
+                "title": recipe.title,
+                "time_minutes": recipe.time_minutes,
+                "difficulty": recipe.difficulty,
+            }
+            for recipe in recipes
+        ]
+
+        serializer = RecipeListSerializer(data, many=True)
         return Response(serializer.data)
