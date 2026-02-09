@@ -1,6 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
+from django.db.models import Q
 
 from apps.recipes.models import Recipe
 from .serializers import RecipeDetailSerializer, RecipeListSerializer
@@ -38,7 +39,27 @@ class RecipeDetailAPIView(APIView):
     
 class RecipeListAPIView(APIView):
     def get(self, request):
-        recipes = Recipe.objects.all().order_by("title")
+        recipes = Recipe.objects.all()
+
+        difficulty = request.GET.get("difficulty")
+        max_time = request.GET.get("max_time")
+        ingredient = request.GET.get("ingredient")
+
+        if difficulty:
+            recipes = recipes.filter(difficulty = difficulty)
+
+        if max_time:
+            try:
+                recipes = recipes.filter(time_minutes__lte = int(max_time))
+            except ValueError:
+                pass
+
+        if ingredient:
+            recipes = recipes.filter(
+                ingredients__ingredient__name__icontains=ingredient
+            ).distinct()
+        
+        recipes = recipes.order_by("title")
 
         data = [
             {
