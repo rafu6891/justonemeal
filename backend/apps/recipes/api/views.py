@@ -44,6 +44,7 @@ class RecipeListAPIView(APIView):
         difficulty = request.GET.get("difficulty")
         max_time = request.GET.get("max_time")
         ingredient = request.GET.get("ingredient")
+        exclude = request.GET.get("exclude")
 
         if difficulty:
             recipes = recipes.filter(difficulty = difficulty)
@@ -58,6 +59,11 @@ class RecipeListAPIView(APIView):
             recipes = recipes.filter(
                 ingredients__ingredient__name__icontains=ingredient
             ).distinct()
+
+        if exclude:
+            recipes = recipes.exclude(
+                ingredients__ingredient__name__icontains=exclude
+            )
         
         recipes = recipes.order_by("title")
 
