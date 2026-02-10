@@ -43,8 +43,8 @@ class RecipeListAPIView(APIView):
 
         difficulty = request.GET.get("difficulty")
         max_time = request.GET.get("max_time")
-        ingredient = request.GET.get("ingredient")
-        exclude = request.GET.get("exclude")
+        ingredient_param = request.GET.get("ingredient")
+        exclude_param = request.GET.get("exclude")
 
         if difficulty:
             recipes = recipes.filter(difficulty = difficulty)
@@ -55,15 +55,22 @@ class RecipeListAPIView(APIView):
             except ValueError:
                 pass
 
-        if ingredient:
-            recipes = recipes.filter(
-                ingredients__ingredient__name__icontains=ingredient
-            ).distinct()
+        if ingredient_param:
+            ingredients = [i.strip() for i in ingredient_param.split(",") if i.strip()]
 
-        if exclude:
-            recipes = recipes.exclude(
-                ingredients__ingredient__name__icontains=exclude
-            )
+            query = Q()
+            for ing in ingredients:
+                query |= Q(ingredients__ingredient__name__icontains=ing)
+            
+            recipes = recipes.filter(query).distinct()
+
+        if exclude_param:
+            excludes = [e.strip() for e in exclude_param.split(",") if e.strip()]
+
+            for ex in excludes:
+                recipes = recipes.exclude(
+                    ingredients__ingredient__name__icontains=ex
+                )
         
         recipes = recipes.order_by("title")
 
