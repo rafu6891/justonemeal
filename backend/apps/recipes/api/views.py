@@ -8,6 +8,8 @@ from rest_framework.pagination import PageNumberPagination
 
 from apps.recipes.models import Recipe
 from .serializers import RecipeDetailSerializer, RecipeListSerializer
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
 
 
 class RecipePagination(PageNumberPagination):
@@ -84,7 +86,8 @@ class RecipeDetailAPIView(APIView):
             description="Order recipes by title, time_minutes or difficulty. Use - for descending.",
         ),
     ]
-)   
+)
+@method_decorator(cache_page(60), name="get")   
 class RecipeListAPIView(APIView):
     def get(self, request):
         recipes = Recipe.objects.all()
