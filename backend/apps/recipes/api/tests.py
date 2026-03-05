@@ -114,3 +114,77 @@ class RecipeIngredientFilterAPITest(TestCase):
 
         self.assertEqual(titles, ["Arroz con huevo"])
 
+
+class RecipeIngredientFilterAPITest(TestCase):
+
+    def setUp(self):
+        self.client = APIClient()
+
+        #ingredientes
+        self.arroz = Ingredient.objects.create(name="Arroz", unit="g")
+        self.huevo = Ingredient.objects.create(name="Huevo", unit="unidad")
+        self.ajo = Ingredient.objects.create(name="Ajo", unit="diente")
+
+        #Receta 1: arroz y huevo
+        self.recipe1 = Recipe.objects.create(
+            title = "Arroz con huevo",
+            time_minutes = 10,
+            difficulty = "easy"
+        )
+        RecipeIngredient.objects.create(
+            recipe = self.recipe1, ingredient=self.arroz, quantity=80
+        )
+        RecipeIngredient.objects.create(
+            reipe = self.recipe1, ingredient=self.huevo, quantity=1
+        )
+
+        #Receta 2: arroz solo
+        self.recipe2 = Recipe.objects.create(
+            title = "Arroz blanco",
+            time_minutes = 5,
+            difficulty = "easy"
+        )
+        RecipeIngredient.objects.create(
+            recipe = self.recipe2, ingredient=self.arroz, quantity=80
+        )
+
+        #Receta 3: arroz y ajo
+        self.recipe3 = Recipe.objects.create(
+            title = "Arroz con ajo",
+            time_minutes = 15,
+            difficulty = "easy"
+        )
+        RecipeIngredient.objects.create(
+            recipe = self.recipe3, ingredient=self.arroz, quantity=80
+        )
+        RecipeIngredient.objects.create(
+            reipe = self.recipe3, ingredient=self.ajo, quantity=1
+        )
+        
+    def test_filter_ingredient_all(self):
+        response = self.client.get(
+            "/api/recipes/?ingredient_all=arroz,huevo"
+        )
+
+        self.assertEqual(response.status_code, 200)
+        titles = [r["title"] for r in response.data]
+
+        self.assertEqual(titles, ["Arroz con huevo"])
+
+    def test_filter_ingredient_all_with_exclude(self):
+        response = self.client.get(
+            "/api/recipes/?ingredient_all=arroz,huevo&exclude=ajo"
+        )
+
+        self.assertEqual(response.status_code, 200)
+        titles = [r["title"] for r in response.data]
+
+        self.assertEqual(titles, ["Arroz con huevo"])
+
+    def test_filter_ingredient_all_no_results(self):
+        response = self.client.get(
+            "/api/recipes/?ingredient_all=huevo,ajo"
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data, [])
