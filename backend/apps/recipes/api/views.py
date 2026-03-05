@@ -2,10 +2,18 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
+from drf_spectacular.utils import extend_schema, OpenApiParameter
+from drf_spectacular.types import OpenApiTypes
+from rest_framework.pagination import PageNumberPagination
 
 from apps.recipes.models import Recipe
 from .serializers import RecipeDetailSerializer, RecipeListSerializer
 
+
+class RecipePagination(PageNumberPagination):
+    page_size = 10
+
+    
 class RecipeDetailAPIView(APIView):
     def get(self, request, recipe_id):
         try:
@@ -36,7 +44,41 @@ class RecipeDetailAPIView(APIView):
 
         serializer = RecipeDetailSerializer(data)
         return Response(serializer.data)
-    
+   
+@extend_schema(
+    parameters=[
+        OpenApiParameter(
+            name="difficulty",
+            type=OpenApiTypes.STR,
+            location=OpenApiParameter.QUERY,
+            description="Filter recipes by difficulty",
+        ),
+        OpenApiParameter(
+            name="max_time",
+            type=OpenApiTypes.INT,
+            location=OpenApiParameter.QUERY,
+            description="Maximum preparation time in minutes",
+        ),
+        OpenApiParameter(
+            name="ingredient",
+            type=OpenApiTypes.STR,
+            location=OpenApiParameter.QUERY,
+            description="Recipes containing any of these ingredients (comma separated)",
+        ),
+        OpenApiParameter(
+            name="ingredient_all",
+            type=OpenApiTypes.STR,
+            location=OpenApiParameter.QUERY,
+            description="Recipes containing all these ingredients (comma separated)",
+        ),
+        OpenApiParameter(
+            name="exclude",
+            type=OpenApiTypes.STR,
+            location=OpenApiParameter.QUERY,
+            description="Exclude recipes containing these ingredients",
+        ),
+    ]
+)   
 class RecipeListAPIView(APIView):
     def get(self, request):
         recipes = Recipe.objects.all()
@@ -95,5 +137,19 @@ class RecipeListAPIView(APIView):
             for recipe in recipes
         ]
 
+        paginator = RecipePagination()
+        page = paginator.paginate_queryset(recipes, request)
+
+        data = [
+            {
+                "id": recipe.id,
+                "title": recipe.title,
+                "time_minutes": recipe.time_minutes,
+                "difficulty": recipe.difficulty,
+            }
+            for recipe in page
+        ]
+
         serializer = RecipeListSerializer(data, many=True)
-        return Response(serializer.data)
+
+        return paginator.get_paginated_response(serializer.data)
