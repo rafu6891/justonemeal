@@ -77,6 +77,12 @@ class RecipeDetailAPIView(APIView):
             location=OpenApiParameter.QUERY,
             description="Exclude recipes containing these ingredients",
         ),
+        OpenApiParameter(
+            name="order",
+            type=OpenApiTypes.STR,
+            location=OpenApiParameter.QUERY,
+            description="Order recipes by title, time_minutes or difficulty. Use - for descending.",
+        ),
     ]
 )   
 class RecipeListAPIView(APIView):
@@ -88,6 +94,8 @@ class RecipeListAPIView(APIView):
         ingredient_param = request.GET.get("ingredient")
         exclude_param = request.GET.get("exclude")
         ingredient_all_param = request.GET.get("ingredient_all")
+        search = request.GET.get("search")
+        order = request.GET.get("order")
 
         if difficulty:
             recipes = recipes.filter(difficulty = difficulty)
@@ -124,8 +132,24 @@ class RecipeListAPIView(APIView):
                 recipes = recipes.exclude(
                     ingredients__ingredient__name__icontains=ex
                 )
-        
-        recipes = recipes.order_by("title")
+        if search:
+            recipes = recipes.filter(title__icontains=search)
+
+        allowed_order_fields = [
+            "title",
+            "time_minutes",
+            "difficulty",
+        ]
+
+        if order:
+            order_field = order.lstrip("-")
+
+            if order_field in allowed_order_fields:
+                recipes = recipes.order_by(order)
+            else:
+                recipes = recipes.order_by("title")
+        else:
+            recipes = recipes.order_by("title")
 
         data = [
             {
