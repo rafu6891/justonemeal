@@ -1,5 +1,10 @@
 # JustOneMeal API
 
+![Python](https://img.shields.io/badge/Python-3.11-blue)
+![Django](https://img.shields.io/badge/Django-4.x-green)
+![API](https://img.shields.io/badge/API-REST-orange)
+![Status](https://img.shields.io/badge/status-active-success)
+
 API REST para gestionar recetas pensadas para **una sola persona**, con cantidades escalables para evitar desperdicio de comida.
 
 El objetivo del proyecto es resolver un problema común: la mayoría de recetas están pensadas para varias personas, lo que genera sobras innecesarias.
@@ -85,6 +90,13 @@ http://127.0.0.1:8000/api/
 ```
 
 ---
+# API Endpoints
+
+| Method | Endpoint | Description |
+|------|------|------|
+| GET | /api/recipes/ | List all recipes |
+| GET | /api/recipes/{id}/ | Get recipe detail |
+
 
 # Endpoints
 
@@ -198,6 +210,20 @@ Número de personas para las que se quiere calcular la receta.
 ```
 
 ---
+
+
+# Project Structure
+
+backend/
+│
+├── config/        # Django project configuration
+├── apps/
+│   ├── recipes/   # Core domain logic
+│   ├── users/     # User management (future)
+│   └── common/    # Shared utilities
+│
+└── manage.py
+
 
 # Tests
 
