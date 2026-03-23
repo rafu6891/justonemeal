@@ -33,6 +33,7 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'drf_spectacular',
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
@@ -121,7 +122,12 @@ REST_FRAMEWORK = {
 
     'DEFAULT_THROTTLE_RATES': {
         'anon': '100/minute',
-    }
+    },
+
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ],
 }
 
 SPECTACULAR_SETTINGS = {
@@ -129,3 +135,4 @@ SPECTACULAR_SETTINGS = {
     'DESCRIPTION': 'API for single-serving recipes with scalable ingredients',
     'VERSION': '1.0.0',
 }
+

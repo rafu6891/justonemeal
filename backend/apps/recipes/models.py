@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 DISCRETE_UNITS = {
     "unidad", "u", "pieza", "diente", "rodaja", "hoja", "filete"
@@ -65,3 +66,11 @@ class RecipeIngredient(models.Model):
     
     def __str__(self):
         return f"{self.quantity} {self.Ingredient.unit} {self.Ingredient.name}"
+    
+    
+class Favorite(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('user', 'recipe')

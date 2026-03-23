@@ -11,6 +11,12 @@ from .serializers import RecipeDetailSerializer, RecipeListSerializer
 from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
 
+from rest_framework.permissions import IsAuthenticated
+from rest_framework import status
+from django.shortcuts import get_object_or_404
+from apps.recipes.models import Favorite
+
+
 
 class RecipePagination(PageNumberPagination):
     page_size = 10
@@ -180,3 +186,42 @@ class RecipeListAPIView(APIView):
         serializer = RecipeListSerializer(data, many=True)
 
         return paginator.get_paginated_response(serializer.data)
+    
+
+class FavoriteAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        favorites = Favorite.objects.filter(user=request.user)
+
+        data = [
+            {
+                "id": fav.recipe.id,
+                "title": fav.recipe.title,
+                "time_minutes": fav.recipe.time_minutes,
+                "difficulty": fav.recipe.difficulty,
+            }
+            for fav in favorites
+        ]
+
+        return Response(data)
+
+    def post(self, request, recipe_id):
+        recipe = get_object_or_404(Recipe, id=recipe_id)
+
+        Favorite.objects.get_or_create(
+            user=request.user,
+            recipe=recipe
+        )
+
+        return Response({"detail": "Added to favorites"}, status=status.HTTP_201_CREATED)
+
+    def delete(self, request, recipe_id):
+        recipe = get_object_or_404(Recipe, id=recipe_id)
+
+        Favorite.objects.filter(
+            user=request.user,
+            recipe=recipe
+        ).delete()
+
+        return Response({"detail": "Removed from favorites"}, status=status.HTTP_204_NO_CONTENT)
