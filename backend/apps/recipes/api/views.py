@@ -173,12 +173,21 @@ class RecipeListAPIView(APIView):
         paginator = RecipePagination()
         page = paginator.paginate_queryset(recipes, request)
 
+        if request.user.is_authenticated:
+            favorite_ids = set(
+                Favorite.objects.filter(user=request.user)
+                .values_list("recipe_id", flat=True)
+            )
+        else:
+            favorite_ids = set()
+
         data = [
             {
                 "id": recipe.id,
                 "title": recipe.title,
                 "time_minutes": recipe.time_minutes,
                 "difficulty": recipe.difficulty,
+                "is_favorite": recipe.id in favorite_ids,
             }
             for recipe in page
         ]
