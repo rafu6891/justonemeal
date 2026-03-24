@@ -173,11 +173,16 @@ class RecipeListAPIView(APIView):
         paginator = RecipePagination()
         page = paginator.paginate_queryset(recipes, request)
 
+        favorite_ids = set()
+
         if request.user.is_authenticated:
             favorite_ids = set(
-                Favorite.objects.filter(user=request.user)
+                Favorite.objects.filter(user_id=request.user.id)
                 .values_list("recipe_id", flat=True)
             )
+            print("USER:", request.user)
+            print("FAVORITES:", favorite_ids)
+        
         else:
             favorite_ids = set()
 
@@ -192,9 +197,7 @@ class RecipeListAPIView(APIView):
             for recipe in page
         ]
 
-        serializer = RecipeListSerializer(data, many=True)
-
-        return paginator.get_paginated_response(serializer.data)
+        return paginator.get_paginated_response(data)
     
 
 class FavoriteAPIView(APIView):

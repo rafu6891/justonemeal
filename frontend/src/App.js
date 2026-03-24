@@ -8,14 +8,20 @@ function App() {
   const [user, setUser] = useState(localStorage.getItem("user") || "");
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/api/recipes/")
+    fetch("http://127.0.0.1:8000/api/recipes/", {
+      headers: token
+        ? {
+            "Authorization": `Token ${token}`,
+          }
+        : {},
+    })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
+        console.log("RECIPESDATA:", data);
         setRecipes(data.results || data);
       })
       .catch((err) => console.error(err));
-  }, []);
+  }, [token]);
 
   const handleLogin = () => {
     fetch("http://127.0.0.1:8000/api/users/login/", {
