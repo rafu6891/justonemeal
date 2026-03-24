@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 
 function App() {
   const [recipes, setRecipes] = useState([]);
+  const [token, setToken] = useState(localStorage.getItem("token") || "");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
   useEffect(() => {
     fetch("http://127.0.0.1:8000/api/recipes/")
@@ -13,6 +16,28 @@ function App() {
       .catch((err) => console.error(err));
   }, []);
 
+  const handleLogin = () => {
+    fetch("http://127.0.0.1:8000/api/users/login/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username,
+        password,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("LOGIN RESPONSE:", data); // 👈 IMPORTANTE
+        setToken(data.token);
+        localStorage.setItem("token", data.token);
+        setUsername("");
+        setPassword("");
+      })
+      .catch((err) => console.error(err));
+  };
+
   const toggleFavorite = (recipe) => {
     const url = `http://127.0.0.1:8000/api/favorites/${recipe.id}/`;
 
@@ -22,7 +47,7 @@ function App() {
       method: method,
       headers: {
         "Content-Type": "application/json",
-        // luego añadiremos token aquí
+        "Authorization": `Token ${token}`,
       },
     })
       .then(() => {
@@ -40,6 +65,42 @@ function App() {
 
   return (
     <div style={{ padding: "20px" }}>
+
+      {token ? (
+        <p>✅ Usuario logueado</p>
+      ) : (
+        <p>❌ No logueado</p>
+      )}
+      {!token && (
+        <div style={{ marginBottom: "20px" }}>
+          <input
+            placeholder="username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+
+          <input
+            placeholder="password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+
+          <button onClick={handleLogin}>Login</button>
+        </div>
+      )}
+      {token && (
+        <button
+          onClick={() => {
+            localStorage.removeItem("token");
+            setToken("");
+          }}
+        >
+          Logout
+        </button>
+      )}
+      
+
       <h1>JustOneMeal 🍽️</h1>
 
       {recipes.map((recipe) => (
