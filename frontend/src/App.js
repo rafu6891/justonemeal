@@ -5,6 +5,7 @@ function App() {
   const [token, setToken] = useState(localStorage.getItem("token") || "");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [user, setUser] = useState(localStorage.getItem("user") || "");
 
   useEffect(() => {
     fetch("http://127.0.0.1:8000/api/recipes/")
@@ -29,9 +30,13 @@ function App() {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log("LOGIN RESPONSE:", data); // 👈 IMPORTANTE
+        console.log("LOGIN RESPONSE:", data);
         setToken(data.token);
         localStorage.setItem("token", data.token);
+
+        setUser(username);
+        localStorage.setItem("user", username);
+
         setUsername("");
         setPassword("");
       })
@@ -67,7 +72,7 @@ function App() {
     <div style={{ padding: "20px" }}>
 
       {token ? (
-        <p>✅ Usuario logueado</p>
+        <p>👤 {user}</p>
       ) : (
         <p>❌ No logueado</p>
       )}
@@ -93,7 +98,9 @@ function App() {
         <button
           onClick={() => {
             localStorage.removeItem("token");
+            localStorage.removeItem("user");
             setToken("");
+            setUser("");
           }}
         >
           Logout
