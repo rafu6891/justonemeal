@@ -7,20 +7,25 @@ function App() {
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(localStorage.getItem("user") || "");
 
-  useEffect(() => {
+
+  const fetchRecipes = (customToken = token) => {
     fetch("http://127.0.0.1:8000/api/recipes/", {
-      headers: token
+      headers: customToken
         ? {
-            "Authorization": `Token ${token}`,
+            Authorization: `Token ${customToken}`,
           }
         : {},
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log("RECIPESDATA:", data);
         setRecipes(data.results || data);
       })
       .catch((err) => console.error(err));
+  };
+
+
+  useEffect(() => {
+    fetchRecipes();
   }, [token]);
 
   const handleLogin = () => {
@@ -45,6 +50,8 @@ function App() {
 
         setUsername("");
         setPassword("");
+
+        fetchRecipes(data.token);
       })
       .catch((err) => console.error(err));
   };
