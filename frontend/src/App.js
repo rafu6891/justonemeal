@@ -6,10 +6,28 @@ function App() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(localStorage.getItem("user") || "");
+  const [search, setSearch] = useState("");
+  const [difficulty, setDifficulty] = useState("");
 
 
   const fetchRecipes = (customToken = token) => {
-    fetch("http://127.0.0.1:8000/api/recipes/", {
+    let url = "http://127.0.0.1:8000/api/recipes/?";
+
+    const params = [];
+
+    if (search) {
+      params.push(`search=${search}`);
+    }
+
+    if (difficulty) {
+      params.push(`difficulty=${difficulty}`);
+    }
+
+    if (params.length > 0) {
+      url += params.join("&");
+    }
+
+    fetch(url, {
       headers: customToken
         ? {
             Authorization: `Token ${customToken}`,
@@ -21,12 +39,12 @@ function App() {
         setRecipes(data.results || data);
       })
       .catch((err) => console.error(err));
-  };
+    };  
 
 
   useEffect(() => {
     fetchRecipes();
-  }, [token]);
+  }, [token, search, difficulty]);
 
   const handleLogin = () => {
     fetch("http://127.0.0.1:8000/api/users/login/", {
@@ -80,6 +98,7 @@ function App() {
       })
       .catch((err) => console.error(err));
   };
+  
 
   return (
     <div style={{ padding: "20px" }}>
@@ -106,6 +125,7 @@ function App() {
 
           <button onClick={handleLogin}>Login</button>
         </div>
+        
       )}
       {token && (
         <button
@@ -119,6 +139,31 @@ function App() {
           Logout
         </button>
       )}
+
+      {/* buscador + filtro */}
+      <div style={{ marginBottom: "20px" }}>
+        <input
+          placeholder="Buscar receta..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+
+        <button onClick={() => fetchRecipes()}>
+          Buscar
+        </button>
+
+        {/*filtro de dificultad */}
+        <select
+          value={difficulty}
+          onChange={(e) => setDifficulty(e.target.value)}
+          style={{ marginLeft: "10px" }}
+        >
+          <option value="">Todas</option>
+          <option value="easy">Fácil</option>
+          <option value="medium">Media</option>
+          <option value="hard">Difícil</option>
+        </select>
+      </div>
       
 
       <h1>JustOneMeal 🍽️</h1>
