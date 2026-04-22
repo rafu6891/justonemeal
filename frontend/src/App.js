@@ -168,18 +168,41 @@ function App() {
 
       <h1>JustOneMeal 🍽️</h1>
 
-      {recipes.map((recipe) => (
-        <div key={recipe.id}>
-          {recipe.title} - {recipe.time_minutes} min
-
-          <span
-            style={{ cursor: "pointer", marginLeft: "10px" }}
-            onClick={() => toggleFavorite(recipe)}
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
+          gap: "20px",
+        }}
+      >
+        {recipes.map((recipe) => (
+          <div
+            key={recipe.id}
+            style={{
+              border: "1px solid #ddd",
+              borderRadius: "12px",
+              padding: "15px",
+              marginBottom: "15px",
+              boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
+              transition: "0.2s",
+              cursor: "pointer",
+            }}
           >
-            {recipe.is_favorite ? "❤️" : "🤍"}
-          </span>
-        </div>
-      ))}
+            <h3>{recipe.title}</h3>
+
+            <p>
+              ⏱ {recipe.time_minutes} min | 📊 {recipe.difficulty}
+            </p>
+
+            <span
+              style={{ cursor: "pointer", fontSize: "20px" }}
+              onClick={() => toggleFavorite(recipe)}
+            >
+              {recipe.is_favorite ? "❤️" : "🤍"}
+            </span>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
