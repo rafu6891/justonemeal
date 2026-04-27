@@ -18,6 +18,7 @@ class Recipe(models.Model):
     time_minutes = models.PositiveBigIntegerField() #tiempo en minutos
     difficulty = models.CharField(max_length=20) #dificultad de preparacion
     created_at = models.DateTimeField(auto_now_add=True) #creacion de la receta
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title
@@ -65,7 +66,7 @@ class RecipeIngredient(models.Model):
         return str(round(value, 1))
     
     def __str__(self):
-        return f"{self.quantity} {self.Ingredient.unit} {self.Ingredient.name}"
+        return f"{self.quantity} {self.ingredient.unit} {self.ingredient.name}"
     
     
 class Favorite(models.Model):

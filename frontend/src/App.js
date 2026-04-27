@@ -193,6 +193,9 @@ function App() {
             <p>
               ⏱ {recipe.time_minutes} min | 📊 {recipe.difficulty}
             </p>
+            <p style={{ margin: "5px 0", fontSize: "14px", color: "#555" }}>
+              👤 {recipe.author}
+            </p>
 
             <span
               style={{ cursor: "pointer", fontSize: "20px" }}

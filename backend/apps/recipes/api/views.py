@@ -11,7 +11,7 @@ from .serializers import RecipeDetailSerializer, RecipeListSerializer
 from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
 
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated,IsAuthenticatedOrReadOnly
 from rest_framework import status
 from django.shortcuts import get_object_or_404
 from apps.recipes.models import Favorite
@@ -95,6 +95,7 @@ class RecipeDetailAPIView(APIView):
 )
 @method_decorator(cache_page(60), name="get")   
 class RecipeListAPIView(APIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
     def get(self, request):
         recipes = Recipe.objects.all()
 
@@ -193,6 +194,7 @@ class RecipeListAPIView(APIView):
                 "time_minutes": recipe.time_minutes,
                 "difficulty": recipe.difficulty,
                 "is_favorite": recipe.id in favorite_ids,
+                "author": recipe.user.username,
             }
             for recipe in page
         ]
