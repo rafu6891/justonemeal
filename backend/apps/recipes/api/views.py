@@ -97,8 +97,7 @@ class RecipeDetailAPIView(APIView):
 class RecipeListAPIView(APIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
     def get(self, request):
-        recipes = Recipe.objects.all()
-
+        recipes = Recipe.objects.filter(approved=True)
         difficulty = request.GET.get("difficulty")
         max_time = request.GET.get("max_time")
         ingredient_param = request.GET.get("ingredient")
