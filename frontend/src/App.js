@@ -8,6 +8,9 @@ function App() {
   const [user, setUser] = useState(localStorage.getItem("user") || "");
   const [search, setSearch] = useState("");
   const [difficulty, setDifficulty] = useState("");
+  const [newTitle, setNewTitle] = useState("");
+  const [newTime, setNewTime] = useState("");
+  const [newDifficulty, setNewDifficulty] = useState("easy");
 
 
   const fetchRecipes = (customToken = token) => {
@@ -68,7 +71,7 @@ function App() {
 
         setUsername("");
         setPassword("");
-
+        setRecipes([]);
         fetchRecipes(data.token);
       })
       .catch((err) => console.error(err));
@@ -95,6 +98,29 @@ function App() {
               : r
           )
         );
+      })
+      .catch((err) => console.error(err));
+  };
+
+  const createRecipe = () => {
+    fetch("http://127.0.0.1:8000/api/recipes/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Token ${token}`,
+      },
+      body: JSON.stringify({
+        title: newTitle,
+        time_minutes: parseInt(newTime),
+        difficulty: newDifficulty,
+      }),
+    })
+      .then((res) => res.json())
+      .then(() => {
+        setNewTitle("");
+        setNewTime("");
+        setNewDifficulty("easy");
+        fetchRecipes();
       })
       .catch((err) => console.error(err));
   };
@@ -134,10 +160,46 @@ function App() {
             localStorage.removeItem("user");
             setToken("");
             setUser("");
+            setRecipes([]); 
           }}
         >
           Logout
         </button>
+      )}
+
+      {token && (
+        <div style={{ marginBottom: "20px" }}>
+          <h3>Crear receta</h3>
+
+          <input
+            placeholder="Título"
+            value={newTitle}
+            onChange={(e) => setNewTitle(e.target.value)}
+            style={{ marginRight: "10px" }}
+          />
+
+          <input
+            placeholder="Tiempo (min)"
+            type="number"
+            value={newTime}
+            onChange={(e) => setNewTime(e.target.value)}
+            style={{ marginRight: "10px" }}
+          />
+
+          <select
+            value={newDifficulty}
+            onChange={(e) => setNewDifficulty(e.target.value)}
+            style={{ marginRight: "10px" }}
+          >
+            <option value="easy">Fácil</option>
+            <option value="medium">Media</option>
+            <option value="hard">Difícil</option>
+          </select>
+
+          <button onClick={createRecipe}>
+            Crear
+          </button>
+        </div>
       )}
 
       {/* buscador + filtro */}
