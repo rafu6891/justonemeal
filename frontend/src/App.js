@@ -4,6 +4,7 @@ function App() {
   const [recipes, setRecipes] = useState([]);
   const [search, setSearch] = useState("");
   const [difficulty, setDifficulty] = useState("");
+  const [order, setOrder] = useState("");
   
 
 
@@ -18,6 +19,10 @@ function App() {
 
     if (difficulty) {
       params.push(`difficulty=${difficulty}`);
+    }
+
+    if (order) {
+      params.push(`order=${order}`);
     }
 
     if (params.length > 0) {
@@ -35,68 +40,183 @@ function App() {
 
   useEffect(() => {
     fetchRecipes();
-  }, [search, difficulty]);
+  }, [search, difficulty, order]);
+
+  const likeRecipe = (recipeId) => {
+  fetch(`http://127.0.0.1:8000/api/recipes/${recipeId}/like/`, {
+    method: "POST",
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      setRecipes((prev) =>
+        prev.map((recipe) =>
+          recipe.id === recipeId
+            ? { ...recipe, likes: data.likes }
+            : recipe
+        )
+      );
+    })
+    .catch((err) => console.error(err));
+  };
 
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div
+      style={{
+        padding: "20px",
+        minHeight: "100vh",
+        backgroundColor: "#f5f5f5",
+        fontFamily: "Arial",
+      }}
+    >
+      <h1
+        style={{
+          textAlign: "center",
+          marginBottom: "30px",
+          fontSize: "42px",
+          color: "#333",
+        }}
+      >
+        JustOneMeal 🍽️
+      </h1>
 
-
-      
-      {/* buscador + filtro */}
-      <div style={{ marginBottom: "20px" }}>
+      {/* 🔹 buscador + filtros */}
+      <div
+        style={{
+          display: "flex",
+          gap: "10px",
+          marginBottom: "40px",
+          justifyContent: "center",
+          flexWrap: "wrap",
+        }}
+      >
         <input
           placeholder="Buscar receta..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
+          style={{
+            padding: "12px",
+            borderRadius: "10px",
+            border: "1px solid #ccc",
+            minWidth: "220px",
+            fontSize: "16px",
+          }}
         />
 
-        <button onClick={() => fetchRecipes()}>
+        <button
+          onClick={() => fetchRecipes()}
+          style={{
+            padding: "12px 18px",
+            borderRadius: "10px",
+            border: "none",
+            backgroundColor: "#ff7043",
+            color: "white",
+            cursor: "pointer",
+            fontSize: "16px",
+            fontWeight: "bold",
+          }}
+        >
           Buscar
         </button>
 
-        {/*filtro de dificultad */}
+        {/* 🔹 filtro dificultad */}
         <select
           value={difficulty}
           onChange={(e) => setDifficulty(e.target.value)}
-          style={{ marginLeft: "10px" }}
+          style={{
+            padding: "12px",
+            borderRadius: "10px",
+            border: "1px solid #ccc",
+            fontSize: "16px",
+          }}
         >
           <option value="">Todas</option>
           <option value="easy">Fácil</option>
           <option value="medium">Media</option>
           <option value="hard">Difícil</option>
         </select>
+
+        {/* 🔹 ordenar */}
+        <select
+          value={order}
+          onChange={(e) => setOrder(e.target.value)}
+          style={{
+            padding: "12px",
+            borderRadius: "10px",
+            border: "1px solid #ccc",
+            fontSize: "16px",
+          }}
+        >
+          <option value="">Ordenar</option>
+          <option value="-likes">Más likes ❤️</option>
+          <option value="time_minutes">Menos tiempo ⏱</option>
+          <option value="title">Título A-Z</option>
+        </select>
       </div>
-      
 
-      <h1>JustOneMeal 🍽️</h1>
-
+      {/* 🔹 recetas */}
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
-          gap: "20px",
+          gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+          gap: "25px",
         }}
       >
         {recipes.map((recipe) => (
           <div
             key={recipe.id}
             style={{
-              border: "1px solid #ddd",
-              borderRadius: "12px",
-              padding: "15px",
-              marginBottom: "15px",
-              boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
+              backgroundColor: "white",
+              borderRadius: "18px",
+              padding: "20px",
+              boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
               transition: "0.2s",
-              cursor: "pointer",
             }}
           >
-            <h3>{recipe.title}</h3>
+            <h3
+              style={{
+                marginBottom: "12px",
+                fontSize: "24px",
+                color: "#222",
+              }}
+            >
+              {recipe.title}
+            </h3>
 
-            <p>
-              ⏱ {recipe.time_minutes} min | 📊 {recipe.difficulty}
+            <p
+              style={{
+                color: "#666",
+                fontSize: "15px",
+                marginBottom: "15px",
+              }}
+            >
+              ⏱ {recipe.time_minutes} min
             </p>
-            
+
+            <p
+              style={{
+                display: "inline-block",
+                padding: "6px 12px",
+                borderRadius: "999px",
+                backgroundColor: "#eee",
+                fontSize: "14px",
+                marginBottom: "15px",
+              }}
+            >
+              📊 {recipe.difficulty}
+            </p>
+
+            <div
+              style={{
+                marginTop: "10px",
+                fontSize: "20px",
+                cursor: "pointer",
+                userSelect: "none",
+              }}
+              onClick={() => likeRecipe(recipe.id)}
+            >
+              ❤️ {recipe.likes}
+            </div>
           </div>
         ))}
       </div>
