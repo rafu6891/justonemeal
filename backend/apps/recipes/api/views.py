@@ -11,10 +11,10 @@ from .serializers import RecipeDetailSerializer, RecipeListSerializer
 from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
 
-from rest_framework.permissions import IsAuthenticated,IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework import status
 from django.shortcuts import get_object_or_404
-from apps.recipes.models import Favorite
+
 
 
 
@@ -160,22 +160,10 @@ class RecipeListAPIView(APIView):
         else:
             recipes = recipes.order_by("title")
 
-        data = [
-            {
-                "id": recipe.id,
-                "title": recipe.title,
-                "time_minutes": recipe.time_minutes,
-                "difficulty": recipe.difficulty,
-            }
-            for recipe in recipes
-        ]
 
         paginator = RecipePagination()
         page = paginator.paginate_queryset(recipes, request)
 
-        favorite_ids = set()
-
-        
 
         data = [
             {
@@ -183,6 +171,7 @@ class RecipeListAPIView(APIView):
                 "title": recipe.title,
                 "time_minutes": recipe.time_minutes,
                 "difficulty": recipe.difficulty,
+                "likes": recipe.likes,
             }
             for recipe in page
         ]
@@ -190,40 +179,16 @@ class RecipeListAPIView(APIView):
         return paginator.get_paginated_response(data)
     
 
-class FavoriteAPIView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request):
-        favorites = Favorite.objects.filter(user=request.user)
-
-        data = [
-            {
-                "id": fav.recipe.id,
-                "title": fav.recipe.title,
-                "time_minutes": fav.recipe.time_minutes,
-                "difficulty": fav.recipe.difficulty,
-            }
-            for fav in favorites
-        ]
-
-        return Response(data)
+class RecipeLikeAPIView(APIView):
 
     def post(self, request, recipe_id):
         recipe = get_object_or_404(Recipe, id=recipe_id)
 
-        Favorite.objects.get_or_create(
-            user=request.user,
-            recipe=recipe
-        )
+        recipe.likes += 1
+        recipe.save()
 
-        return Response({"detail": "Added to favorites"}, status=status.HTTP_201_CREATED)
+        return Response({
+            "likes": recipe.likes
+        })
+    
 
-    def delete(self, request, recipe_id):
-        recipe = get_object_or_404(Recipe, id=recipe_id)
-
-        Favorite.objects.filter(
-            user=request.user,
-            recipe=recipe
-        ).delete()
-
-        return Response({"detail": "Removed from favorites"}, status=status.HTTP_204_NO_CONTENT)

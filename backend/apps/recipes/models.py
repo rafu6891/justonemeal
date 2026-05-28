@@ -20,6 +20,7 @@ class Recipe(models.Model):
     created_at = models.DateTimeField(auto_now_add=True) #creacion de la receta
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     approved = models.BooleanField(default=False)
+    likes = models.IntegerField(default=0)
 
     def __str__(self):
         return self.title
