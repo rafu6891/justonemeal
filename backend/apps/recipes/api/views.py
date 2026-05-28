@@ -148,6 +148,7 @@ class RecipeListAPIView(APIView):
             "title",
             "time_minutes",
             "difficulty",
+            "likes",
         ]
 
         if order:
