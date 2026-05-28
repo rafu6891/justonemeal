@@ -95,7 +95,7 @@ class RecipeDetailAPIView(APIView):
 )
 @method_decorator(cache_page(60), name="get")   
 class RecipeListAPIView(APIView):
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = []
     def get(self, request):
         recipes = Recipe.objects.filter(approved=True)
         difficulty = request.GET.get("difficulty")
@@ -178,6 +178,19 @@ class RecipeListAPIView(APIView):
         ]
 
         return paginator.get_paginated_response(data)
+    
+    def post(self, request):
+        recipe = Recipe.objects.create(
+            title=request.data.get("title"),
+            time_minutes=request.data.get("time_minutes"),
+            difficulty=request.data.get("difficulty"),
+            approved=True,
+        )
+
+        return Response({
+            "id": recipe.id,
+            "title": recipe.title,
+        })
     
 
 class RecipeLikeAPIView(APIView):

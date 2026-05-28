@@ -18,7 +18,7 @@ class Recipe(models.Model):
     time_minutes = models.PositiveBigIntegerField() #tiempo en minutos
     difficulty = models.CharField(max_length=20) #dificultad de preparacion
     created_at = models.DateTimeField(auto_now_add=True) #creacion de la receta
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True,)
     approved = models.BooleanField(default=False)
     likes = models.IntegerField(default=0)
 
