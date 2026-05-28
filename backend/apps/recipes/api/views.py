@@ -175,16 +175,7 @@ class RecipeListAPIView(APIView):
 
         favorite_ids = set()
 
-        if request.user.is_authenticated:
-            favorite_ids = set(
-                Favorite.objects.filter(user_id=request.user.id)
-                .values_list("recipe_id", flat=True)
-            )
-            print("USER:", request.user)
-            print("FAVORITES:", favorite_ids)
         
-        else:
-            favorite_ids = set()
 
         data = [
             {
@@ -192,8 +183,6 @@ class RecipeListAPIView(APIView):
                 "title": recipe.title,
                 "time_minutes": recipe.time_minutes,
                 "difficulty": recipe.difficulty,
-                "is_favorite": recipe.id in favorite_ids,
-                "author": recipe.user.username,
             }
             for recipe in page
         ]

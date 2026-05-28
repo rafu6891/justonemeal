@@ -2,18 +2,12 @@ import { useEffect, useState } from "react";
 
 function App() {
   const [recipes, setRecipes] = useState([]);
-  const [token, setToken] = useState(localStorage.getItem("token") || "");
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [user, setUser] = useState(localStorage.getItem("user") || "");
   const [search, setSearch] = useState("");
   const [difficulty, setDifficulty] = useState("");
-  const [newTitle, setNewTitle] = useState("");
-  const [newTime, setNewTime] = useState("");
-  const [newDifficulty, setNewDifficulty] = useState("easy");
+  
 
 
-  const fetchRecipes = (customToken = token) => {
+  const fetchRecipes = () => {
     let url = "http://127.0.0.1:8000/api/recipes/?";
 
     const params = [];
@@ -30,178 +24,25 @@ function App() {
       url += params.join("&");
     }
 
-    fetch(url, {
-      headers: customToken
-        ? {
-            Authorization: `Token ${customToken}`,
-          }
-        : {},
-    })
+    fetch(url)
       .then((res) => res.json())
       .then((data) => {
         setRecipes(data.results || data);
       })
       .catch((err) => console.error(err));
-    };  
+  };  
 
 
   useEffect(() => {
     fetchRecipes();
-  }, [token, search, difficulty]);
+  }, [search, difficulty]);
 
-  const handleLogin = () => {
-    fetch("http://127.0.0.1:8000/api/users/login/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        username,
-        password,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("LOGIN RESPONSE:", data);
-        setToken(data.token);
-        localStorage.setItem("token", data.token);
-
-        setUser(username);
-        localStorage.setItem("user", username);
-
-        setUsername("");
-        setPassword("");
-        setRecipes([]);
-        fetchRecipes(data.token);
-      })
-      .catch((err) => console.error(err));
-  };
-
-  const toggleFavorite = (recipe) => {
-    const url = `http://127.0.0.1:8000/api/favorites/${recipe.id}/`;
-
-    const method = recipe.is_favorite ? "DELETE" : "POST";
-
-    fetch(url, {
-      method: method,
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Token ${token}`,
-      },
-    })
-      .then(() => {
-        // actualizar estado local
-        setRecipes((prev) =>
-          prev.map((r) =>
-            r.id === recipe.id
-              ? { ...r, is_favorite: !r.is_favorite }
-              : r
-          )
-        );
-      })
-      .catch((err) => console.error(err));
-  };
-
-  const createRecipe = () => {
-    fetch("http://127.0.0.1:8000/api/recipes/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Token ${token}`,
-      },
-      body: JSON.stringify({
-        title: newTitle,
-        time_minutes: parseInt(newTime),
-        difficulty: newDifficulty,
-      }),
-    })
-      .then((res) => res.json())
-      .then(() => {
-        setNewTitle("");
-        setNewTime("");
-        setNewDifficulty("easy");
-        fetchRecipes();
-      })
-      .catch((err) => console.error(err));
-  };
-  
 
   return (
     <div style={{ padding: "20px" }}>
 
-      {token ? (
-        <p>👤 {user}</p>
-      ) : (
-        <p>❌ No logueado</p>
-      )}
-      {!token && (
-        <div style={{ marginBottom: "20px" }}>
-          <input
-            placeholder="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
 
-          <input
-            placeholder="password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-
-          <button onClick={handleLogin}>Login</button>
-        </div>
-        
-      )}
-      {token && (
-        <button
-          onClick={() => {
-            localStorage.removeItem("token");
-            localStorage.removeItem("user");
-            setToken("");
-            setUser("");
-            setRecipes([]); 
-          }}
-        >
-          Logout
-        </button>
-      )}
-
-      {token && (
-        <div style={{ marginBottom: "20px" }}>
-          <h3>Crear receta</h3>
-
-          <input
-            placeholder="Título"
-            value={newTitle}
-            onChange={(e) => setNewTitle(e.target.value)}
-            style={{ marginRight: "10px" }}
-          />
-
-          <input
-            placeholder="Tiempo (min)"
-            type="number"
-            value={newTime}
-            onChange={(e) => setNewTime(e.target.value)}
-            style={{ marginRight: "10px" }}
-          />
-
-          <select
-            value={newDifficulty}
-            onChange={(e) => setNewDifficulty(e.target.value)}
-            style={{ marginRight: "10px" }}
-          >
-            <option value="easy">Fácil</option>
-            <option value="medium">Media</option>
-            <option value="hard">Difícil</option>
-          </select>
-
-          <button onClick={createRecipe}>
-            Crear
-          </button>
-        </div>
-      )}
-
+      
       {/* buscador + filtro */}
       <div style={{ marginBottom: "20px" }}>
         <input
@@ -255,16 +96,7 @@ function App() {
             <p>
               ⏱ {recipe.time_minutes} min | 📊 {recipe.difficulty}
             </p>
-            <p style={{ margin: "5px 0", fontSize: "14px", color: "#555" }}>
-              👤 {recipe.author}
-            </p>
-
-            <span
-              style={{ cursor: "pointer", fontSize: "20px" }}
-              onClick={() => toggleFavorite(recipe)}
-            >
-              {recipe.is_favorite ? "❤️" : "🤍"}
-            </span>
+            
           </div>
         ))}
       </div>
