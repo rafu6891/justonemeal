@@ -15,6 +15,7 @@ FRACTIONS = {
 class Recipe(models.Model):
     title = models.CharField(max_length=200) #nombre de la receta
     description = models.TextField(blank=True) #descripcion de la receta
+    ingredients_text = models.TextField(blank=True)
     time_minutes = models.PositiveBigIntegerField() #tiempo en minutos
     difficulty = models.CharField(max_length=20) #dificultad de preparacion
     created_at = models.DateTimeField(auto_now_add=True) #creacion de la receta

@@ -170,6 +170,8 @@ class RecipeListAPIView(APIView):
             {
                 "id": recipe.id,
                 "title": recipe.title,
+                "description": recipe.description,
+                "ingredients_text": recipe.ingredients_text,
                 "time_minutes": recipe.time_minutes,
                 "difficulty": recipe.difficulty,
                 "likes": recipe.likes,
