@@ -15,12 +15,10 @@ class RecipeAdmin(admin.ModelAdmin):
         "difficulty",
         "time_minutes",
         "likes",
-        "approved",
     )
 
     list_filter = (
         "difficulty",
-        "approved",
     )
 
     search_fields = (

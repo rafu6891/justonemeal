@@ -241,7 +241,7 @@ function App() {
             >
               {recipe.title}
               {" "}
-              {expandedRecipe === recipe.id ? "▲" : "▼"}
+              {expandedRecipe === recipe.id ? "🔼" : "🔽"}
             </h3>
 
             <p
@@ -277,7 +277,7 @@ function App() {
               }}
               onClick={() => likeRecipe(recipe.id)}
             >
-              ❤️ {recipe.likes}
+              ❤️ {recipe.likes} likes
             </div>
 
             {expandedRecipe === recipe.id && (

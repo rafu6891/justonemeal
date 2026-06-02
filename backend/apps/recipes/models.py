@@ -2,7 +2,13 @@ from django.db import models
 from django.contrib.auth.models import User
 
 DISCRETE_UNITS = {
-    "unidad", "u", "pieza", "diente", "rodaja", "hoja", "filete"
+    "unit",
+    "slice",
+    "clove",
+    "piece",
+    "leaf",
+    "fillet",
+    "egg",
 }
 
 FRACTIONS = {
@@ -11,16 +17,32 @@ FRACTIONS = {
     0.75: "3/4",
 }
 
+
+UNIT_CHOICES = [
+    ("g", "Gramos (g)"),
+    ("kg", "Kilogramos (kg)"),
+    ("ml", "Mililitros (ml)"),
+    ("l", "Litros (l)"),
+    ("tbsp", "Cucharadas"),
+    ("tsp", "Cucharaditas"),
+
+    ("unit", "Unidades"),
+    ("slice", "Rebanadas"),
+    ("clove", "Dientes de ajo"),
+    ("piece", "Piezas"),
+    ("leaf", "Hojas"),
+    ("fillet", "Filetes"),
+    ("egg", "Huevos"),
+]
+
 #models de recetas, lo basico
 class Recipe(models.Model):
     title = models.CharField(max_length=200) #nombre de la receta
     description = models.TextField(blank=True) #descripcion de la receta
-    ingredients_text = models.TextField(blank=True)
     time_minutes = models.PositiveBigIntegerField() #tiempo en minutos
     difficulty = models.CharField(max_length=20) #dificultad de preparacion
     created_at = models.DateTimeField(auto_now_add=True) #creacion de la receta
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True,)
-    approved = models.BooleanField(default=False)
     likes = models.IntegerField(default=0)
 
     def __str__(self):
@@ -29,7 +51,12 @@ class Recipe(models.Model):
 
 class Ingredient(models.Model):
     name = models.CharField(max_length=100)
-    unit = models.CharField(max_length=20) #para las unidades de medida
+
+    unit = models.CharField(
+        max_length=20,
+        choices=UNIT_CHOICES,
+    )
+
     to_taste = models.BooleanField(default=False)
 
     def __str__(self):

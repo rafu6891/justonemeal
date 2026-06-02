@@ -194,7 +194,6 @@ class RecipeListAPIView(APIView):
             title=request.data.get("title"),
             time_minutes=request.data.get("time_minutes"),
             difficulty=request.data.get("difficulty"),
-            approved=True,
         )
 
         return Response({
