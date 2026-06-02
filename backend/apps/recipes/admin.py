@@ -10,9 +10,33 @@ class RecipeIngredientInline(admin.TabularInline):
 
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
-    list_display = ("title", "time_minutes", "difficulty")
+    list_display = (
+        "title",
+        "difficulty",
+        "time_minutes",
+        "likes",
+        "approved",
+    )
+
+    list_filter = (
+        "difficulty",
+        "approved",
+    )
+
+    search_fields = (
+        "title",
+        "description",
+    )
+
+    readonly_fields = (
+        "created_at",
+        "likes",
+    )
+
     inlines = [RecipeIngredientInline]
+
 
 @admin.register(Ingredient)
 class IngredientAdmin(admin.ModelAdmin):
     list_display = ("name", "unit")
+    search_fields = ("name",)

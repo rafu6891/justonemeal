@@ -66,6 +66,13 @@ function App() {
     return "#999";
   };
 
+  const getDifficultyLabel = (difficulty) => {
+    if (difficulty === "easy") return "Fácil";
+    if (difficulty === "medium") return "Media";
+    if (difficulty === "hard") return "Difícil";
+    return difficulty;
+  };
+
 
   return (
     <div
@@ -196,15 +203,20 @@ function App() {
           <div
             key={recipe.id}
             style={{
-              backgroundColor: "white",
+              backgroundColor: 
+                expandedRecipe === recipe.id
+                  ? "#ffffff"
+                  : "#fafafa",
               borderRadius: "18px",
               padding: "20px",
-              boxShadow: "0 6px 18px rgba(0,0,0,0.12)",
-              transition: "0.2s",
+              boxShadow: 
+                expandedRecipe === recipe.id
+                  ? "0 12px 30px rgba(0,0,0,0.15)"
+                  : "0 6px 18px rgba(0,0,0,0.12)",
+              transition: "all 0.2s ease",
             }}
-            onMouseEnter={(e) => {
+           onMouseEnter={(e) => {
               e.currentTarget.style.transform = "translateY(-4px)";
-              e.currentTarget.style.boxShadow = "0 12px 28px rgba(0,0,0,0.18)";
             }}
 
             onMouseLeave={(e) => {
@@ -253,7 +265,7 @@ function App() {
                 fontWeight: "bold",
               }}
             >
-              {recipe.difficulty}
+              {getDifficultyLabel(recipe.difficulty)}
             </p>
 
             <div
@@ -285,18 +297,23 @@ function App() {
                   🥖 Ingredientes
                 </h4>
 
-                {recipe.ingredients_text ? (
-                  <ul>
-                    {recipe.ingredients_text
-                      .split("\n")
-                      .filter((line) => line.trim())
-                      .map((ingredient, index) => (
-                        <li key={index}>{ingredient}</li>
-                      ))}
+                {recipe.ingredients?.length > 0 ? (
+                  <ul
+                    style={{
+                      paddingLeft: "20px",
+                      marginBottom: "20px",
+                    }}
+                  >
+                    {recipe.ingredients.map((ingredient, index) => (
+                      <li key={index}>
+                        {ingredient.quantity} {ingredient.unit} {ingredient.name}
+                      </li>
+                    ))}
                   </ul>
                 ) : (
                   <p>Sin ingredientes</p>
                 )}
+
                 <h4
                   style={{
                     marginBottom: "10px",
@@ -312,7 +329,7 @@ function App() {
                     lineHeight: "1.6",
                   }}
                 >
-                  {recipe.description || "Sin descripción, estamos trabajando en ello."}
+                  {recipe.description || "Sin descripción"}
                 </p>
               </div>
             )}

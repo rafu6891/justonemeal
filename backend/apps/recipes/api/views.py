@@ -171,10 +171,18 @@ class RecipeListAPIView(APIView):
                 "id": recipe.id,
                 "title": recipe.title,
                 "description": recipe.description,
-                "ingredients_text": recipe.ingredients_text,
                 "time_minutes": recipe.time_minutes,
                 "difficulty": recipe.difficulty,
                 "likes": recipe.likes,
+
+                "ingredients": [
+                    {
+                        "name": ri.ingredient.name,
+                        "quantity": ri.quantity,
+                        "unit": ri.ingredient.unit,
+                    }
+                    for ri in recipe.ingredients.all()
+                ],
             }
             for recipe in page
         ]
