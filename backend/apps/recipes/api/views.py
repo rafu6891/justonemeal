@@ -97,7 +97,7 @@ class RecipeDetailAPIView(APIView):
 class RecipeListAPIView(APIView):
     permission_classes = []
     def get(self, request):
-        recipes = Recipe.objects.filter(approved=True)
+        recipes = Recipe.objects.all()
         difficulty = request.GET.get("difficulty")
         max_time = request.GET.get("max_time")
         ingredient_param = request.GET.get("ingredient")
@@ -173,8 +173,8 @@ class RecipeListAPIView(APIView):
                 "description": recipe.description,
                 "time_minutes": recipe.time_minutes,
                 "difficulty": recipe.difficulty,
+                "category": recipe.category,
                 "likes": recipe.likes,
-
                 "ingredients": [
                     {
                         "name": ri.ingredient.name,

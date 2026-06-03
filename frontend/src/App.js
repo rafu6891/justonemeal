@@ -73,6 +73,16 @@ function App() {
     return difficulty;
   };
 
+  const getCategoryLabel = (category) => {
+    if (category === "breakfast") return "🍳 Desayuno";
+    if (category === "lunch") return "🍝 Comida";
+    if (category === "dinner") return "🌙 Cena";
+    if (category === "dessert") return "🍰 Postre";
+    if (category === "snack") return "🥪 Snack";
+
+    return category;
+  };
+
 
   return (
     <div
@@ -270,14 +280,35 @@ function App() {
 
             <div
               style={{
-                marginTop: "10px",
-                fontSize: "20px",
-                cursor: "pointer",
-                userSelect: "none",
+                marginTop: "15px",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
               }}
-              onClick={() => likeRecipe(recipe.id)}
             >
-              ❤️ {recipe.likes} likes
+              <div
+                style={{
+                  fontSize: "20px",
+                  cursor: "pointer",
+                  userSelect: "none",
+                }}
+                onClick={() => likeRecipe(recipe.id)}
+              >
+                ❤️ {recipe.likes} likes
+              </div>
+
+              <div
+                style={{
+                  padding: "4px 10px",
+                  borderRadius: "999px",
+                  backgroundColor: "#f0f0f0",
+                  fontSize: "12px",
+                  fontWeight: "bold",
+                  color: "#666",
+                }}
+              >
+                {getCategoryLabel(recipe.category)}
+              </div>
             </div>
 
             {expandedRecipe === recipe.id && (

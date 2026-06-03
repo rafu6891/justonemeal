@@ -13,12 +13,14 @@ class RecipeAdmin(admin.ModelAdmin):
     list_display = (
         "title",
         "difficulty",
+        "category",
         "time_minutes",
         "likes",
     )
 
     list_filter = (
         "difficulty",
+        "category",
     )
 
     search_fields = (
