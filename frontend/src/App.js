@@ -6,6 +6,7 @@ function App() {
   const [difficulty, setDifficulty] = useState("");
   const [order, setOrder] = useState("");
   const [expandedRecipe, setExpandedRecipe] = useState(null);
+  const [category, setCategory] = useState("");
   
   
   const fetchRecipes = () => {
@@ -19,6 +20,10 @@ function App() {
 
     if (difficulty) {
       params.push(`difficulty=${difficulty}`);
+    }
+
+    if (category) {
+      params.push(`category=${category}`);
     }
 
     if (order) {
@@ -40,7 +45,7 @@ function App() {
 
   useEffect(() => {
     fetchRecipes();
-  }, [search, difficulty, order]);
+  }, [search, difficulty, category, order]);
 
   const likeRecipe = (recipeId) => {
   fetch(`http://127.0.0.1:8000/api/recipes/${recipeId}/like/`, {
@@ -180,6 +185,19 @@ function App() {
           <option value="easy">Fácil</option>
           <option value="medium">Media</option>
           <option value="hard">Difícil</option>
+        </select>
+
+        {/* 🔹 filtro categoria */}
+        <select
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+        >
+          <option value="">Todas las categorías</option>
+          <option value="breakfast">🍳 Desayuno</option>
+          <option value="lunch">🍝 Comida</option>
+          <option value="dinner">🌙 Cena</option>
+          <option value="dessert">🍰 Postre</option>
+          <option value="snack">🥪 Snack</option>
         </select>
 
         {/* 🔹 ordenar */}

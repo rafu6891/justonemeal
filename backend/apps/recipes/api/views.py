@@ -99,6 +99,7 @@ class RecipeListAPIView(APIView):
     def get(self, request):
         recipes = Recipe.objects.all()
         difficulty = request.GET.get("difficulty")
+        category = request.GET.get("category")
         max_time = request.GET.get("max_time")
         ingredient_param = request.GET.get("ingredient")
         exclude_param = request.GET.get("exclude")
@@ -108,6 +109,9 @@ class RecipeListAPIView(APIView):
 
         if difficulty:
             recipes = recipes.filter(difficulty = difficulty)
+
+        if category:
+            recipes = recipes.filter(category=category)
 
         if max_time:
             try:
