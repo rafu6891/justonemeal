@@ -175,13 +175,14 @@ function App() {
           value={difficulty}
           onChange={(e) => setDifficulty(e.target.value)}
           style={{
-            padding: "12px",
-            borderRadius: "10px",
-            border: "1px solid #ccc",
-            fontSize: "16px",
+            padding: "12px 16px",
+            borderRadius: "14px",
+            border: "1px solid #ddd",
+            backgroundColor: "white",
+            fontWeight: "600",
           }}
         >
-          <option value="">Todas</option>
+          <option value="">Dificultad</option>
           <option value="easy">Fácil</option>
           <option value="medium">Media</option>
           <option value="hard">Difícil</option>
@@ -191,8 +192,15 @@ function App() {
         <select
           value={category}
           onChange={(e) => setCategory(e.target.value)}
+          style={{
+            padding: "12px 16px",
+            borderRadius: "14px",
+            border: "1px solid #ddd",
+            backgroundColor: "white",
+            fontWeight: "600",
+          }}
         >
-          <option value="">Todas las categorías</option>
+          <option value="">🍽️ Categorias</option>
           <option value="breakfast">🍳 Desayuno</option>
           <option value="lunch">🍝 Comida</option>
           <option value="dinner">🌙 Cena</option>
@@ -205,15 +213,16 @@ function App() {
           value={order}
           onChange={(e) => setOrder(e.target.value)}
           style={{
-            padding: "12px",
-            borderRadius: "10px",
-            border: "1px solid #ccc",
-            fontSize: "16px",
+            padding: "12px 16px",
+            borderRadius: "14px",
+            border: "1px solid #ddd",
+            backgroundColor: "white",
+            fontWeight: "600",
           }}
         >
           <option value="">Ordenar</option>
           <option value="-likes">Más likes ❤️</option>
-          <option value="time_minutes">Menos tiempo ⏱</option>
+          <option value="time_minutes">Tiempo preparacion ⏱</option>
           <option value="title">Título A-Z</option>
         </select>
       </div>
@@ -260,6 +269,19 @@ function App() {
               )
             }
           >
+            {recipe.image && (
+              <img
+                src={recipe.image}
+                alt={recipe.title}
+                style={{
+                  width: "100%",
+                  height: "180px",
+                  objectFit: "cover",
+                  borderRadius: "12px",
+                  marginBottom: "15px",
+                }}
+              />
+            )}
             <h3
               style={{
                 marginBottom: "12px",

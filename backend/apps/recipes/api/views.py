@@ -174,6 +174,11 @@ class RecipeListAPIView(APIView):
             {
                 "id": recipe.id,
                 "title": recipe.title,
+                "image": (
+                    request.build_absolute_uri(recipe.image.url)
+                    if recipe.image
+                    else None
+                ),
                 "description": recipe.description,
                 "time_minutes": recipe.time_minutes,
                 "difficulty": recipe.difficulty,
