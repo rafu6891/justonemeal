@@ -7,10 +7,14 @@ function App() {
   const [order, setOrder] = useState("");
   const [expandedRecipe, setExpandedRecipe] = useState(null);
   const [category, setCategory] = useState("");
+  const [nextPage, setNextPage] = useState(null);
+  const [previousPage, setPreviousPage] = useState(null);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   
   
-  const fetchRecipes = () => {
-    let url = "http://127.0.0.1:8000/api/recipes/?";
+  const fetchRecipes = (customUrl = null) => {
+    let url = customUrl || "http://127.0.0.1:8000/api/recipes/?";
 
     const params = [];
 
@@ -37,7 +41,13 @@ function App() {
     fetch(url)
       .then((res) => res.json())
       .then((data) => {
-        setRecipes(data.results || data);
+        setRecipes(data.results || []);
+
+        setNextPage(data.next);
+        setTotalPages(
+          Math.ceil(data.count / 15)
+        );
+        setPreviousPage(data.previous);
       })
       .catch((err) => console.error(err));
   };  
@@ -69,6 +79,16 @@ function App() {
     if (difficulty === "medium") return "#FF9800";
     if (difficulty === "hard") return "#F44336";
     return "#999";
+  };
+
+  const getCategoryIcon = (category) => {
+    if (category === "Desayuno") return "🍳";
+    if (category === "Comida") return "🍝";
+    if (category === "Cena") return "🌙";
+    if (category === "Postre") return "🍰";
+    if (category === "Snack") return "🥪";
+
+    return "🍽️";
   };
 
   const getDifficultyLabel = (difficulty) => {
@@ -201,11 +221,11 @@ function App() {
           }}
         >
           <option value="">🍽️ Categorias</option>
-          <option value="breakfast">🍳 Desayuno</option>
-          <option value="lunch">🍝 Comida</option>
-          <option value="dinner">🌙 Cena</option>
-          <option value="dessert">🍰 Postre</option>
-          <option value="snack">🥪 Snack</option>
+          <option value="Desayuno">🍳 Desayuno</option>
+          <option value="Comida">🍝 Comida</option>
+          <option value="Cena">🌙 Cena</option>
+          <option value="Postre">🍰 Postre</option>
+          <option value="Snack">🥪 Snack</option>
         </select>
 
         {/* 🔹 ordenar */}
@@ -269,30 +289,78 @@ function App() {
               )
             }
           >
-            {recipe.image && (
+            {recipe.image ? (
               <img
                 src={recipe.image}
                 alt={recipe.title}
                 style={{
                   width: "100%",
-                  height: "180px",
+                  height: "170px",
                   objectFit: "cover",
                   borderRadius: "12px",
                   marginBottom: "15px",
                 }}
               />
+            ) : (
+              <div
+                style={{
+                  width: "100%",
+                  height: "170px",
+                  backgroundColor: "#f0f0f0",
+                  borderRadius: "12px",
+                  marginBottom: "15px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: "#999",
+                  fontSize: "40px",
+                }}
+              >
+                🍽️
+              </div>
             )}
-            <h3
+            <div
               style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
                 marginBottom: "12px",
-                fontSize: "24px",
-                color: "#222",
               }}
             >
-              {recipe.title}
-              {" "}
-              {expandedRecipe === recipe.id ? "🔼" : "🔽"}
-            </h3>
+              <h3
+                style={{
+                  margin: 0,
+                  fontSize: "24px",
+                  color: "#222",
+                }}
+              >
+                {recipe.title}
+              </h3>
+
+              <button
+                style={{
+                  width: "40px",
+                  height: "40px",
+                  border: "none",
+                  borderRadius: "12px",
+                  backgroundColor:
+                    expandedRecipe === recipe.id
+                      ? "#ff7043"
+                      : "white",
+
+                  color:
+                    expandedRecipe === recipe.id
+                      ? "white"
+                      : "#333",
+                  cursor: "pointer",
+                  boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
+                  fontSize: "18px",
+                  fontWeight: "bold",
+                }}
+              >
+                {expandedRecipe === recipe.id ? "▲" : "▼"}
+              </button>
+            </div>
 
             <p
               style={{
@@ -339,15 +407,28 @@ function App() {
 
               <div
                 style={{
-                  padding: "4px 10px",
-                  borderRadius: "999px",
-                  backgroundColor: "#f0f0f0",
-                  fontSize: "12px",
-                  fontWeight: "bold",
-                  color: "#666",
+                  display: "flex",
+                  gap: "5px",
+                  flexWrap: "wrap",
+                  justifyContent: "flex-end",
                 }}
               >
-                {getCategoryLabel(recipe.category)}
+                {recipe.categories?.map((category) => (
+                  <span
+                    key={category}
+                    style={{
+                      padding: "4px 8px",
+                      boxShadow: "0 2px 6px rgba(0,0,0,0.08)",
+                      borderRadius: "999px",
+                      backgroundColor: "#f0f0f0",
+                      fontSize: "11px",
+                      fontWeight: "bold",
+                      color: "#666",
+                    }}
+                  >
+                    {getCategoryIcon(category)} {category}
+                  </span>
+                ))}
               </div>
             </div>
 
@@ -406,6 +487,87 @@ function App() {
             )}
           </div>
         ))}
+      </div>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: "8px",
+          marginTop: "40px",
+        }}
+      >
+        <button
+          disabled={!previousPage}
+          onClick={() => {
+            fetchRecipes(previousPage);
+            setPageNumber((p) => p - 1);
+          }}
+          style={{
+            width: "40px",
+            height: "40px",
+            border: "none",
+            borderRadius: "12px",
+            backgroundColor: "white",
+            cursor: "pointer",
+            boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
+          }}
+        >
+          ◀
+        </button>
+
+        {Array.from(
+          { length: totalPages },
+          (_, index) => (
+            <button
+              key={index + 1}
+              onClick={() => {
+                fetchRecipes(
+                  `http://127.0.0.1:8000/api/recipes/?page=${index + 1}`
+                );
+                setPageNumber(index + 1);
+              }}
+              style={{
+                minWidth: "40px",
+                height: "40px",
+                border: "none",
+                borderRadius: "12px",
+                backgroundColor:
+                  pageNumber === index + 1
+                    ? "#ff7043"
+                    : "white",
+                color:
+                  pageNumber === index + 1
+                    ? "white"
+                    : "#333",
+                fontWeight: "bold",
+                cursor: "pointer",
+                boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
+              }}
+            >
+              {index + 1}
+            </button>
+          )
+        )}
+
+        <button
+          disabled={!nextPage}
+          onClick={() => {
+            fetchRecipes(nextPage);
+            setPageNumber((p) => p + 1);
+          }}
+          style={{
+            width: "40px",
+            height: "40px",
+            border: "none",
+            borderRadius: "12px",
+            backgroundColor: "white",
+            cursor: "pointer",
+            boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
+          }}
+        >
+          ▶
+        </button>
       </div>
     </div>
   );

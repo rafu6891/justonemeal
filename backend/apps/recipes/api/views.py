@@ -19,7 +19,7 @@ from django.shortcuts import get_object_or_404
 
 
 class RecipePagination(PageNumberPagination):
-    page_size = 10
+    page_size = 15
 
     
 class RecipeDetailAPIView(APIView):
