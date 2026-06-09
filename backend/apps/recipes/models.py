@@ -42,20 +42,18 @@ DIFFICULTY_CHOICES = [
     ("hard", "Difícil"),
 ]
 
+class Category(models.Model):
+    name = models.CharField(max_length=50, unique=True)
 
-CATEGORY_CHOICES = [
-    ("breakfast", "Desayuno"),
-    ("lunch", "Comida"),
-    ("dinner", "Cena"),
-    ("dessert", "Postre"),
-    ("snack", "Snack"),
-]
+    def __str__(self):
+        return self.name
+
 
 #models de recetas, lo basico
 class Recipe(models.Model):
     title = models.CharField(max_length=200) #nombre de la receta
     description = models.TextField(blank=True) #descripcion de la receta
-    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default="lunch",)
+    categories = models.ManyToManyField(Category, blank=True,)
     time_minutes = models.PositiveBigIntegerField() #tiempo en minutos
     difficulty = models.CharField(max_length=20, choices=DIFFICULTY_CHOICES,) #dificultad de preparacion
     created_at = models.DateTimeField(auto_now_add=True) #creacion de la receta

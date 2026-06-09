@@ -111,7 +111,9 @@ class RecipeListAPIView(APIView):
             recipes = recipes.filter(difficulty = difficulty)
 
         if category:
-            recipes = recipes.filter(category=category)
+            recipes = recipes.filter(
+                categories__name=category
+            ).distinct()
 
         if max_time:
             try:
@@ -182,7 +184,10 @@ class RecipeListAPIView(APIView):
                 "description": recipe.description,
                 "time_minutes": recipe.time_minutes,
                 "difficulty": recipe.difficulty,
-                "category": recipe.category,
+                "categories": [
+                    category.name
+                    for category in recipe.categories.all()
+                ],
                 "likes": recipe.likes,
                 "ingredients": [
                     {

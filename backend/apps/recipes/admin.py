@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Recipe, Ingredient, RecipeIngredient
+from .models import Recipe, Ingredient, RecipeIngredient, Category
 
 
 # Register your models here.
@@ -13,14 +13,12 @@ class RecipeAdmin(admin.ModelAdmin):
     list_display = (
         "title",
         "difficulty",
-        "category",
         "time_minutes",
         "likes",
     )
 
     list_filter = (
         "difficulty",
-        "category",
     )
 
     search_fields = (
@@ -40,3 +38,7 @@ class RecipeAdmin(admin.ModelAdmin):
 class IngredientAdmin(admin.ModelAdmin):
     list_display = ("name", "unit")
     search_fields = ("name",)
+
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ("name",)
