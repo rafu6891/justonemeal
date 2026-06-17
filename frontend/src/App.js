@@ -114,40 +114,74 @@ function App() {
       style={{
         padding: "20px",
         minHeight: "100vh",
-        backgroundColor: "#f5f5f5",
+        background: "linear-gradient(180deg, #f8f1e7 0%, #f4ece1 100%)",
         fontFamily: "Arial",
       }}
     >
-      <h1
+      <div
         style={{
+          maxWidth: "900px",
+          margin: "0 auto 40px auto",
+          padding: "35px 30px",
           textAlign: "center",
-          marginBottom: "30px",
-          fontSize: "42px",
-          color: "#333",
+          backgroundImage: "url('/images/texture-wood.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          borderRadius: "24px",
+          color: "#3b2a1a",
+          textShadow: "0 1px 2px rgba(255,255,255,0.3)",
+          boxShadow: "0 6px 18px rgba(60,40,20,0.12)",
         }}
       >
-        JustOneMeal 🍽️
-      </h1>
-      <p
-        style={{
-          textAlign: "center",
-          color: "#666",
-          fontSize: "18px",
-          marginTop: "-15px",
-          marginBottom: "30px",
-        }}
-      >
-        Recetas sencillas para cualquier día.
-      </p>
-      <p
-        style={{
-          textAlign: "center",
-          color: "#888",
-          marginBottom: "40px",
-        }}
-      >
-        {recipes.length} recetas disponibles
-      </p>
+
+        <img
+          src="/images/logo-jom-icon.png"
+          alt="JustOneMeal"
+          style={{
+            height: "180px",
+            marginBottom: "10",
+          }}
+        />
+
+        <h1
+          style={{
+            margin: 0,
+            fontSize: "56px",
+            color: "#3b2a1a",
+            fontWeight: "700",
+          }}
+        >
+          JustOneMeal
+        </h1>
+
+        <p
+          style={{
+            fontSize: "20px",
+            marginTop: "15px",
+            marginBottom: "20px",
+            opacity: "0.95",
+          }}
+        >
+          Recetas sencillas para cualquier día.
+        </p>
+
+        <div
+          style={{
+            display: "inline-block",
+            backgroundColor: "rgba(255,255,255,0.25)",
+            padding: "10px 18px",
+            borderRadius: "999px",
+
+            fontSize: "20px",
+            fontWeight: "600",
+            color: "#3b2a1a",
+          }}
+        >
+          <span>
+            {recipes.length} recetas disponibles
+          </span>
+        </div>
+      </div>
 
 
       {/* 🔹 buscador + filtros */}
@@ -215,7 +249,8 @@ function App() {
           style={{
             padding: "12px 16px",
             borderRadius: "14px",
-            border: "1px solid #ddd",
+            border: "none",
+            boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
             backgroundColor: "white",
             fontWeight: "600",
           }}
@@ -316,7 +351,14 @@ function App() {
                   fontSize: "40px",
                 }}
               >
-                🍽️
+                <img
+                  src="/images/logo-jom-icon.png"
+                  alt="JustOneMeal"
+                  style={{
+                    height: "80px",
+                    opacity: 0.7,
+                  }}
+                />
               </div>
             )}
             <div
@@ -400,7 +442,10 @@ function App() {
                   cursor: "pointer",
                   userSelect: "none",
                 }}
-                onClick={() => likeRecipe(recipe.id)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  likeRecipe(recipe.id);
+                }}
               >
                 ❤️ {recipe.likes}
               </div>
