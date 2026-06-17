@@ -19,20 +19,21 @@ FRACTIONS = {
 
 
 UNIT_CHOICES = [
-    ("g", "Gramos (g)"),
-    ("kg", "Kilogramos (kg)"),
-    ("ml", "Mililitros (ml)"),
-    ("l", "Litros (l)"),
-    ("tbsp", "Cucharadas"),
-    ("tsp", "Cucharaditas"),
+    ("g", "g"),
+    ("kg", "kg"),
+    ("ml", "ml"),
+    ("l", "l"),
 
-    ("unit", "Unidades"),
-    ("slice", "Rebanadas"),
-    ("clove", "Dientes de ajo"),
-    ("piece", "Piezas"),
-    ("leaf", "Hojas"),
-    ("fillet", "Filetes"),
-    ("egg", "Huevos"),
+    ("tbsp", "cda"),
+    ("tsp", "cdta"),
+
+    ("unit", "ud"),
+    ("slice", "rebanada"),
+    ("clove", "diente"),
+    ("piece", "pieza"),
+    ("leaf", "hoja"),
+    ("fillet", "filete"),
+    ("egg", "huevo"),
 ]
 
 
@@ -53,6 +54,7 @@ class Category(models.Model):
 class Recipe(models.Model):
     title = models.CharField(max_length=200) #nombre de la receta
     description = models.TextField(blank=True) #descripcion de la receta
+    instructions = models.TextField(blank=True)
     categories = models.ManyToManyField(Category, blank=True,)
     time_minutes = models.PositiveBigIntegerField() #tiempo en minutos
     difficulty = models.CharField(max_length=20, choices=DIFFICULTY_CHOICES,) #dificultad de preparacion

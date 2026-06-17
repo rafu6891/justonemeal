@@ -182,6 +182,7 @@ class RecipeListAPIView(APIView):
                     else None
                 ),
                 "description": recipe.description,
+                "instructions": recipe.instructions,
                 "time_minutes": recipe.time_minutes,
                 "difficulty": recipe.difficulty,
                 "categories": [
@@ -193,7 +194,7 @@ class RecipeListAPIView(APIView):
                     {
                         "name": ri.ingredient.name,
                         "quantity": ri.quantity,
-                        "unit": ri.ingredient.unit,
+                        "unit": ri.ingredient.get_unit_display(),
                     }
                     for ri in recipe.ingredients.all()
                 ],

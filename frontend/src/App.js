@@ -402,7 +402,7 @@ function App() {
                 }}
                 onClick={() => likeRecipe(recipe.id)}
               >
-                ❤️ {recipe.likes} likes
+                ❤️ {recipe.likes}
               </div>
 
               <div
@@ -483,6 +483,35 @@ function App() {
                 >
                   {recipe.description || "Sin descripción"}
                 </p>
+                <h4
+                  style={{
+                    marginTop: "20px",
+                    marginBottom: "10px",
+                  }}
+                >
+                  👨‍🍳 Preparación
+                </h4>
+
+                {recipe.instructions ? (
+                  <ol
+                    style={{
+                      paddingLeft: "20px",
+                      color: "#555",
+                      lineHeight: "1.8",
+                    }}
+                  >
+                    {recipe.instructions
+                      .split("\n")
+                      .filter(step => step.trim())
+                      .map((step, index) => (
+                        <li key={index}>
+                          {step}
+                        </li>
+                      ))}
+                  </ol>
+                ) : (
+                  <p>Sin instrucciones</p>
+                )}
               </div>
             )}
           </div>
