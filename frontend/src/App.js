@@ -503,7 +503,15 @@ function App() {
                   >
                     {recipe.ingredients.map((ingredient, index) => (
                       <li key={index}>
-                        {ingredient.quantity} {ingredient.unit} {ingredient.name}
+                        {ingredient.to_taste ? (
+                          <>
+                            {ingredient.name} al gusto
+                          </>
+                        ) : (
+                          <>
+                            {ingredient.quantity} {ingredient.unit} {ingredient.name}
+                          </>
+                        )}
                       </li>
                     ))}
                   </ul>

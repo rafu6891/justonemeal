@@ -195,6 +195,7 @@ class RecipeListAPIView(APIView):
                         "name": ri.ingredient.name,
                         "quantity": ri.quantity,
                         "unit": ri.ingredient.get_unit_display(),
+                        "to_taste": ri.ingredient.to_taste,
                     }
                     for ri in recipe.ingredients.all()
                 ],
