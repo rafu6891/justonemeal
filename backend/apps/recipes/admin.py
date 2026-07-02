@@ -6,6 +6,7 @@ from .models import Recipe, Ingredient, RecipeIngredient, Category
 class RecipeIngredientInline(admin.TabularInline):
     model = RecipeIngredient
     extra = 1
+    autocomplete_fields = ["ingredient"]
 
 
 @admin.register(Recipe)
@@ -47,6 +48,10 @@ class IngredientAdmin(admin.ModelAdmin):
     )
 
     search_fields = (
+        "name",
+    )
+
+    ordering = (
         "name",
     )
 

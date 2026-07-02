@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
+from django.db.models import Q
 
 DISCRETE_UNITS = {
     "unit",
@@ -68,7 +70,7 @@ class Recipe(models.Model):
 
 
 class Ingredient(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True,)
 
     unit = models.CharField(
         max_length=20,
@@ -76,6 +78,16 @@ class Ingredient(models.Model):
     )
 
     to_taste = models.BooleanField(default=False)
+
+    def clean(self):
+        if Ingredient.objects.filter(
+            name__iexact=self.name
+        ).exclude(pk=self.pk).exists():
+            raise ValidationError(
+                {
+                    "name": "Ya existe un ingrediente con ese nombre."
+                }
+            )
 
     def __str__(self):
         return self.name
