@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import RecipeModal from "./components/RecipeModal";
 
 function App() {
   const [recipes, setRecipes] = useState([]);
@@ -6,6 +7,7 @@ function App() {
   const [difficulty, setDifficulty] = useState("");
   const [order, setOrder] = useState("");
   const [expandedRecipe, setExpandedRecipe] = useState(null);
+  const [selectedRecipe, setSelectedRecipe] = useState(null);
   const [category, setCategory] = useState("");
   const [nextPage, setNextPage] = useState(null);
   const [previousPage, setPreviousPage] = useState(null);
@@ -108,6 +110,23 @@ function App() {
     return category;
   };
 
+  const formatQuantity = (quantity) => {
+    const value = Number(quantity);
+
+    const fractions = {
+      0.25: "¼",
+      0.5: "½",
+      0.75: "¾",
+      1.25: "1¼",
+      1.5: "1½",
+      1.75: "1¾",
+      2.25: "2¼",
+      2.5: "2½",
+      2.75: "2¾",
+    };
+
+    return fractions[value] || quantity;
+  };
 
   return (
     <div
@@ -316,13 +335,7 @@ function App() {
               e.currentTarget.style.boxShadow = "0 6px 18px rgba(0,0,0,0.12)";
             }}
 
-            onClick={() =>
-              setExpandedRecipe(
-                expandedRecipe === recipe.id
-                  ? null
-                  : recipe.id
-              )
-            }
+            onClick={() => setSelectedRecipe(recipe)}
           >
             {recipe.image ? (
               <img
@@ -476,8 +489,8 @@ function App() {
                 ))}
               </div>
             </div>
-
-            {expandedRecipe === recipe.id && (
+            {/* 🔹 detalles receta */}
+            {false && (
               <div
                 style={{
                   marginTop: "20px",
@@ -507,9 +520,13 @@ function App() {
                           <>
                             {ingredient.name} al gusto
                           </>
+                        ) : ingredient.unit === "unit" ? (
+                          <>
+                            {formatQuantity(ingredient.quantity)} {ingredient.name}
+                          </>
                         ) : (
                           <>
-                            {ingredient.quantity} {ingredient.unit} {ingredient.name}
+                            {formatQuantity(ingredient.quantity)} {ingredient.unit_display} {ingredient.name}
                           </>
                         )}
                       </li>
@@ -651,6 +668,13 @@ function App() {
           ▶
         </button>
       </div>
+
+      {selectedRecipe && (
+        <RecipeModal
+          recipe={selectedRecipe}
+          onClose={() => setSelectedRecipe(null)}
+        />
+      )}
     </div>
   );
 }
