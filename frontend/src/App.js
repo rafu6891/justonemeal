@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import RecipeModal from "./components/RecipeModal";
+import {getDifficultyLabel, getDifficultyColor,} from "./utils/recipeHelpers";
+import { formatQuantity } from "./utils/formatQuantity";
 
 function App() {
   const [recipes, setRecipes] = useState([]);
@@ -76,13 +78,6 @@ function App() {
     .catch((err) => console.error(err));
   };
 
-  const getDifficultyColor = (difficulty) => {
-    if (difficulty === "easy") return "#4CAF50";
-    if (difficulty === "medium") return "#FF9800";
-    if (difficulty === "hard") return "#F44336";
-    return "#999";
-  };
-
   const getCategoryIcon = (category) => {
     if (category === "Desayuno") return "🍳";
     if (category === "Comida") return "🍝";
@@ -91,13 +86,6 @@ function App() {
     if (category === "Snack") return "🥪";
 
     return "🍽️";
-  };
-
-  const getDifficultyLabel = (difficulty) => {
-    if (difficulty === "easy") return "Fácil";
-    if (difficulty === "medium") return "Media";
-    if (difficulty === "hard") return "Difícil";
-    return difficulty;
   };
 
   const getCategoryLabel = (category) => {
@@ -110,23 +98,6 @@ function App() {
     return category;
   };
 
-  const formatQuantity = (quantity) => {
-    const value = Number(quantity);
-
-    const fractions = {
-      0.25: "¼",
-      0.5: "½",
-      0.75: "¾",
-      1.25: "1¼",
-      1.5: "1½",
-      1.75: "1¾",
-      2.25: "2¼",
-      2.5: "2½",
-      2.75: "2¾",
-    };
-
-    return fractions[value] || quantity;
-  };
 
   return (
     <div

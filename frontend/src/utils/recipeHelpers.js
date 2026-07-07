@@ -1,11 +1,11 @@
 export const getDifficultyLabel = (difficulty) => {
   switch (difficulty) {
     case "easy":
-      return "🟢 Fácil";
+      return "Fácil";
     case "medium":
-      return "🟠 Media";
+      return "Media";
     case "hard":
-      return "🔴 Difícil";
+      return "Difícil";
     default:
       return difficulty;
   }

@@ -1,3 +1,6 @@
+import { formatQuantity } from "../utils/formatQuantity";
+import { getDifficultyLabel, getDifficultyColor,} from "../utils/recipeHelpers";
+
 export default function RecipeModal({ recipe, onClose }) {
   return (
     <div
@@ -54,18 +57,78 @@ export default function RecipeModal({ recipe, onClose }) {
                 {recipe.title}
             </h1>
             <div
+            style={{
+                display: "flex",
+                gap: "20px",
+                marginBottom: "30px",
+                alignItems: "center",
+                flexWrap: "wrap",
+            }}
+            >
+            <span>❤️ {recipe.likes}</span>
+
+            <span>⏱️ {recipe.time_minutes} min</span>
+
+            <span
                 style={{
-                    display: "flex",
-                    gap: "20px",
-                    marginBottom: "30px",
-                    color: "#666",
-                    fontWeight: "600",
-                    fontSize: "15px",
+                display: "inline-block",
+                backgroundColor: getDifficultyColor(recipe.difficulty),
+                color: "white",
+                padding: "6px 12px",
+                borderRadius: "999px",
+                fontSize: "14px",
+                fontWeight: "bold",
                 }}
             >
-                <span>❤️ {recipe.likes}</span>
-                <span>⏱️ {recipe.time_minutes} min</span>
-                <span>{recipe.difficulty}</span>
+                {getDifficultyLabel(recipe.difficulty)}
+            </span>
+            </div>
+
+            <div
+            style={{
+                display: "grid",
+                gridTemplateColumns: "300px 1fr",
+                gap: "40px",
+                alignItems: "start",
+            }}
+            >
+            <div>
+                <h3>🥖 Ingredientes</h3>
+
+                {recipe.ingredients?.length > 0 ? (
+                <ul
+                    style={{
+                    paddingLeft: "20px",
+                    lineHeight: "2",
+                    }}
+                >
+                    {recipe.ingredients.map((ingredient, index) => (
+                    <li key={index}>
+                        {ingredient.to_taste ? (
+                        <>
+                            {ingredient.name} al gusto
+                        </>
+                        ) : ingredient.unit === "unit" ? (
+                        <>
+                            {formatQuantity(ingredient.quantity)} {ingredient.name}
+                        </>
+                        ) : (
+                        <>
+                            {formatQuantity(ingredient.quantity)}{" "}
+                            {ingredient.unit_display} {ingredient.name}
+                        </>
+                        )}
+                    </li>
+                    ))}
+                </ul>
+                ) : (
+                <p>Sin ingredientes</p>
+                )}
+            </div>
+
+            <div>
+                {/* Aquí irá la preparación */}
+            </div>
             </div>
 
             <button
