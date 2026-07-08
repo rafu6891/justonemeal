@@ -1,0 +1,165 @@
+import {
+  getDifficultyLabel,
+  getDifficultyColor,
+} from "../utils/recipeHelpers";
+
+export default function RecipeCard({
+  recipe,
+  onOpen,
+  likeRecipe,
+  getCategoryIcon,
+}) {
+  return (
+    <div
+      style={{
+        backgroundColor: "#fafafa",
+        borderRadius: "18px",
+        padding: "20px",
+        boxShadow: "0 6px 18px rgba(0,0,0,0.12)",
+        transition: "all 0.2s ease",
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.transform = "translateY(-4px)";
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.transform = "translateY(0)";
+        e.currentTarget.style.boxShadow =
+          "0 6px 18px rgba(0,0,0,0.12)";
+      }}
+    >
+      {recipe.image ? (
+        <img
+          src={recipe.image}
+          alt={recipe.title}
+          style={{
+            width: "100%",
+            height: "170px",
+            objectFit: "cover",
+            borderRadius: "12px",
+            marginBottom: "15px",
+          }}
+        />
+      ) : (
+        <div
+          style={{
+            width: "100%",
+            height: "170px",
+            backgroundColor: "#f0f0f0",
+            borderRadius: "12px",
+            marginBottom: "15px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <img
+            src="/images/logo-jom-icon.png"
+            alt="JustOneMeal"
+            style={{
+              height: "80px",
+              opacity: 0.7,
+            }}
+          />
+        </div>
+      )}
+
+      <h3
+        style={{
+          margin: "0 0 12px 0",
+          fontSize: "24px",
+          color: "#222",
+        }}
+      >
+        {recipe.title}
+      </h3>
+
+      <p
+        style={{
+          color: "#666",
+          marginBottom: "15px",
+        }}
+      >
+        ⏱ {recipe.time_minutes} min
+      </p>
+
+      <p
+        style={{
+          display: "inline-block",
+          padding: "6px 12px",
+          borderRadius: "999px",
+          backgroundColor: getDifficultyColor(recipe.difficulty),
+          color: "white",
+          fontWeight: "bold",
+        }}
+      >
+        {getDifficultyLabel(recipe.difficulty)}
+      </p>
+
+      <div
+        style={{
+          marginTop: "15px",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <div
+          style={{
+            fontSize: "20px",
+            cursor: "pointer",
+            userSelect: "none",
+          }}
+          onClick={(e) => {
+            e.stopPropagation();
+            likeRecipe(recipe.id);
+          }}
+        >
+          ❤️ {recipe.likes}
+        </div>
+
+        <div
+          style={{
+            display: "flex",
+            gap: "5px",
+            flexWrap: "wrap",
+            justifyContent: "flex-end",
+          }}
+        >
+          {recipe.categories?.map((category) => (
+            <span
+              key={category}
+              style={{
+                padding: "4px 8px",
+                borderRadius: "999px",
+                backgroundColor: "#f0f0f0",
+                fontSize: "11px",
+                fontWeight: "bold",
+                color: "#666",
+              }}
+            >
+              {getCategoryIcon(category)} {category}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      <button
+        onClick={() => onOpen(recipe)}
+        style={{
+          marginTop: "20px",
+          width: "100%",
+          padding: "12px",
+          border: "none",
+          borderRadius: "12px",
+          backgroundColor: "#ff7043",
+          color: "white",
+          cursor: "pointer",
+          fontWeight: "bold",
+          fontSize: "15px",
+        }}
+      >
+        🍽️ Ver receta
+      </button>
+    </div>
+  );
+}

@@ -27,7 +27,7 @@ export default function RecipeModal({ recipe, onClose }) {
             borderRadius: "20px",
         }}
       >
-        {recipe.image && (
+        {recipe.image ? (
             <img
                 src={recipe.image}
                 alt={recipe.title}
@@ -39,6 +39,28 @@ export default function RecipeModal({ recipe, onClose }) {
                 borderTopRightRadius: "20px",
                 }}
             />
+            ) : (
+            <div
+                style={{
+                width: "100%",
+                height: "320px",
+                background: "linear-gradient(135deg, #f7f2ea, #efe4d3)",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                borderTopLeftRadius: "20px",
+                borderTopRightRadius: "20px",
+                }}
+            >
+                <img
+                src="/images/logo-jom.png"
+                alt="JustOneMeal"
+                style={{
+                    width: "220px",
+                    opacity: 0.9,
+                }}
+                />
+            </div>
             )}
 
             <div
