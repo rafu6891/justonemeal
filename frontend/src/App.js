@@ -4,6 +4,7 @@ import {getDifficultyLabel, getDifficultyColor,} from "./utils/recipeHelpers";
 import RecipeCard from "./components/RecipeCard";
 import Header from "./components/Header";
 import Filters from "./components/Filters";
+import Pagination from "./components/Pagination";
 
 
 function App() {
@@ -19,49 +20,54 @@ function App() {
   const [totalPages, setTotalPages] = useState(1);
   
   
-  const fetchRecipes = (customUrl = null) => {
-    let url = customUrl || "http://127.0.0.1:8000/api/recipes/?";
+  const fetchRecipes = (page = null) => {
+    let url;
 
-    const params = [];
+    // Si recibimos una URL (nextPage o previousPage)
+    if (typeof page === "string") {
+      url = page;
+    } else {
+      // URL base
+      url = "http://127.0.0.1:8000/api/recipes/";
 
-    if (search) {
-      params.push(`search=${search}`);
-    }
+      const params = [];
 
-    if (difficulty) {
-      params.push(`difficulty=${difficulty}`);
-    }
+      if (page) {
+        params.push(`page=${page}`);
+      }
 
-    if (category) {
-      params.push(`category=${category}`);
-    }
+      if (search) {
+        params.push(`search=${search}`);
+      }
 
-    if (order) {
-      params.push(`order=${order}`);
-    }
+      if (difficulty) {
+        params.push(`difficulty=${difficulty}`);
+      }
 
-    if (params.length > 0) {
-      url += params.join("&");
+      if (category) {
+        params.push(`category=${category}`);
+      }
+
+      if (order) {
+        params.push(`order=${order}`);
+      }
+
+      if (params.length > 0) {
+        url += `?${params.join("&")}`;
+      }
     }
 
     fetch(url)
       .then((res) => res.json())
       .then((data) => {
         setRecipes(data.results || []);
-
         setNextPage(data.next);
-        setTotalPages(
-          Math.ceil(data.count / 15)
-        );
         setPreviousPage(data.previous);
+        setTotalPages(Math.ceil(data.count / 15));
       })
       .catch((err) => console.error(err));
-  };  
+  };
 
-
-  useEffect(() => {
-    fetchRecipes();
-  }, [search, difficulty, category, order]);
 
   const likeRecipe = (recipeId) => {
   fetch(`http://127.0.0.1:8000/api/recipes/${recipeId}/like/`, {
@@ -90,6 +96,11 @@ function App() {
     return "🍽️";
   };
 
+  useEffect(() => {
+    fetchRecipes(1);
+    setPageNumber(1);
+  }, [search, difficulty, category, order]);
+
 
   return (
     <div
@@ -115,7 +126,7 @@ function App() {
         order={order}
         setOrder={setOrder}
       />
-      
+
       {/* 🔹 recetas */}
       <div
         style={{
@@ -135,87 +146,16 @@ function App() {
           />
         ))} 
       </div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          gap: "8px",
-          marginTop: "40px",
-        }}
-      >
-        <button
-          disabled={!previousPage}
-          onClick={() => {
-            fetchRecipes(previousPage);
-            setPageNumber((p) => p - 1);
-          }}
-          style={{
-            width: "40px",
-            height: "40px",
-            border: "none",
-            borderRadius: "12px",
-            backgroundColor: "white",
-            cursor: "pointer",
-            boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
-          }}
-        >
-          ◀
-        </button>
 
-        {Array.from(
-          { length: totalPages },
-          (_, index) => (
-            <button
-              key={index + 1}
-              onClick={() => {
-                fetchRecipes(
-                  `http://127.0.0.1:8000/api/recipes/?page=${index + 1}`
-                );
-                setPageNumber(index + 1);
-              }}
-              style={{
-                minWidth: "40px",
-                height: "40px",
-                border: "none",
-                borderRadius: "12px",
-                backgroundColor:
-                  pageNumber === index + 1
-                    ? "#ff7043"
-                    : "white",
-                color:
-                  pageNumber === index + 1
-                    ? "white"
-                    : "#333",
-                fontWeight: "bold",
-                cursor: "pointer",
-                boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
-              }}
-            >
-              {index + 1}
-            </button>
-          )
-        )}
-
-        <button
-          disabled={!nextPage}
-          onClick={() => {
-            fetchRecipes(nextPage);
-            setPageNumber((p) => p + 1);
-          }}
-          style={{
-            width: "40px",
-            height: "40px",
-            border: "none",
-            borderRadius: "12px",
-            backgroundColor: "white",
-            cursor: "pointer",
-            boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
-          }}
-        >
-          ▶
-        </button>
-      </div>
+      {/* 🔹 paginacion */}
+      <Pagination
+        pageNumber={pageNumber}
+        totalPages={totalPages}
+        previousPage={previousPage}
+        nextPage={nextPage}
+        fetchRecipes={fetchRecipes}
+        setPageNumber={setPageNumber}
+      />
 
       {selectedRecipe && (
         <RecipeModal
