@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import RecipeModal from "./components/RecipeModal";
 import {getDifficultyLabel, getDifficultyColor,} from "./utils/recipeHelpers";
 import RecipeCard from "./components/RecipeCard";
+import Header from "./components/Header";
+import Filters from "./components/Filters";
 
 
 function App() {
@@ -98,170 +100,22 @@ function App() {
         fontFamily: "Arial",
       }}
     >
-      <div
-        style={{
-          maxWidth: "900px",
-          margin: "0 auto 40px auto",
-          padding: "35px 30px",
-          textAlign: "center",
-          backgroundImage: "url('/images/texture-wood.jpg')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          borderRadius: "24px",
-          color: "#3b2a1a",
-          textShadow: "0 1px 2px rgba(255,255,255,0.3)",
-          boxShadow: "0 6px 18px rgba(60,40,20,0.12)",
-        }}
-      >
-
-        <img
-          src="/images/logo-jom-icon.png"
-          alt="JustOneMeal"
-          style={{
-            height: "180px",
-            marginBottom: "10",
-          }}
-        />
-
-        <h1
-          style={{
-            margin: 0,
-            fontSize: "56px",
-            color: "#3b2a1a",
-            fontWeight: "700",
-          }}
-        >
-          JustOneMeal
-        </h1>
-
-        <p
-          style={{
-            fontSize: "20px",
-            marginTop: "15px",
-            marginBottom: "20px",
-            opacity: "0.95",
-          }}
-        >
-          Recetas sencillas para cualquier día.
-        </p>
-
-        <div
-          style={{
-            display: "inline-block",
-            backgroundColor: "rgba(255,255,255,0.25)",
-            padding: "10px 18px",
-            borderRadius: "999px",
-
-            fontSize: "20px",
-            fontWeight: "600",
-            color: "#3b2a1a",
-          }}
-        >
-          <span>
-            {recipes.length} recetas disponibles
-          </span>
-        </div>
-      </div>
+      <Header recipes={recipes} />
 
 
       {/* 🔹 buscador + filtros */}
-      <div
-        style={{
-          display: "flex",
-          gap: "10px",
-          marginBottom: "40px",
-          justifyContent: "center",
-          flexWrap: "wrap",
-        }}
-      >
-
-        <input
-          placeholder="Buscar receta..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          style={{
-            padding: "12px",
-            borderRadius: "10px",
-            border: "1px solid #ccc",
-            minWidth: "220px",
-            fontSize: "16px",
-          }}
-        />
-
-        <button
-          onClick={() => fetchRecipes()}
-          style={{
-            padding: "12px 18px",
-            borderRadius: "10px",
-            border: "none",
-            backgroundColor: "#ff7043",
-            color: "white",
-            cursor: "pointer",
-            fontSize: "16px",
-            fontWeight: "bold",
-          }}
-        >
-          Buscar
-        </button>
-
-        {/* 🔹 filtro dificultad */}
-        <select
-          value={difficulty}
-          onChange={(e) => setDifficulty(e.target.value)}
-          style={{
-            padding: "12px 16px",
-            borderRadius: "14px",
-            border: "1px solid #ddd",
-            backgroundColor: "white",
-            fontWeight: "600",
-          }}
-        >
-          <option value="">Dificultad</option>
-          <option value="easy">Fácil</option>
-          <option value="medium">Media</option>
-          <option value="hard">Difícil</option>
-        </select>
-
-        {/* 🔹 filtro categoria */}
-        <select
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-          style={{
-            padding: "12px 16px",
-            borderRadius: "14px",
-            border: "none",
-            boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
-            backgroundColor: "white",
-            fontWeight: "600",
-          }}
-        >
-          <option value="">🍽️ Categorias</option>
-          <option value="Desayuno">🍳 Desayuno</option>
-          <option value="Comida">🍝 Comida</option>
-          <option value="Cena">🌙 Cena</option>
-          <option value="Postre">🍰 Postre</option>
-          <option value="Snack">🥪 Snack</option>
-        </select>
-
-        {/* 🔹 ordenar */}
-        <select
-          value={order}
-          onChange={(e) => setOrder(e.target.value)}
-          style={{
-            padding: "12px 16px",
-            borderRadius: "14px",
-            border: "1px solid #ddd",
-            backgroundColor: "white",
-            fontWeight: "600",
-          }}
-        >
-          <option value="">Ordenar</option>
-          <option value="-likes">Más likes ❤️</option>
-          <option value="time_minutes">Tiempo preparacion ⏱</option>
-          <option value="title">Título A-Z</option>
-        </select>
-      </div>
-
+      <Filters
+        search={search}
+        setSearch={setSearch}
+        fetchRecipes={fetchRecipes}
+        difficulty={difficulty}
+        setDifficulty={setDifficulty}
+        category={category}
+        setCategory={setCategory}
+        order={order}
+        setOrder={setOrder}
+      />
+      
       {/* 🔹 recetas */}
       <div
         style={{
