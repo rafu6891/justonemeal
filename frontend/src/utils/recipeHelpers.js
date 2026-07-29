@@ -23,3 +23,13 @@ export const getDifficultyColor = (difficulty) => {
       return "#999";
   }
 };
+
+export const getCategoryIcon = (category) => {
+  if (category === "Desayuno") return "🍳";
+  if (category === "Comida") return "🍝";
+  if (category === "Cena") return "🌙";
+  if (category === "Postre") return "🍰";
+  if (category === "Snack") return "🥪";
+
+  return "🍽️";
+};

@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import RecipeModal from "./components/RecipeModal";
-import {getDifficultyLabel, getDifficultyColor,} from "./utils/recipeHelpers";
 import RecipeCard from "./components/RecipeCard";
 import Header from "./components/Header";
 import Filters from "./components/Filters";
 import Pagination from "./components/Pagination";
+import { API_URL } from "./config";
+import { getCategoryIcon } from "./utils/recipeHelpers";
 
 
 function App() {
@@ -28,7 +29,7 @@ function App() {
       url = page;
     } else {
       // URL base
-      url = "http://127.0.0.1:8000/api/recipes/";
+      url = `${API_URL}/recipes/`;
 
       const params = [];
 
@@ -70,7 +71,7 @@ function App() {
 
 
   const likeRecipe = (recipeId) => {
-  fetch(`http://127.0.0.1:8000/api/recipes/${recipeId}/like/`, {
+  fetch(`${API_URL}/recipes/${recipeId}/like/`, {
     method: "POST",
   })
     .then((res) => res.json())
@@ -84,16 +85,6 @@ function App() {
       );
     })
     .catch((err) => console.error(err));
-  };
-
-  const getCategoryIcon = (category) => {
-    if (category === "Desayuno") return "🍳";
-    if (category === "Comida") return "🍝";
-    if (category === "Cena") return "🌙";
-    if (category === "Postre") return "🍰";
-    if (category === "Snack") return "🥪";
-
-    return "🍽️";
   };
 
   useEffect(() => {
