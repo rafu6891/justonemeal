@@ -5,7 +5,20 @@ export default function Pagination({
   nextPage,
   fetchRecipes,
   setPageNumber,
+  theme,
 }) {
+  const buttonStyle = {
+    width: "40px",
+    height: "40px",
+    border: `1px solid ${theme.border}`,
+    borderRadius: "12px",
+    backgroundColor: theme.card,
+    color: theme.text,
+    cursor: "pointer",
+    boxShadow: theme.shadow,
+    fontWeight: "bold",
+  };
+
   return (
     <div
       style={{
@@ -24,13 +37,8 @@ export default function Pagination({
           setPageNumber((p) => p - 1);
         }}
         style={{
-          width: "40px",
-          height: "40px",
-          border: "none",
-          borderRadius: "12px",
-          backgroundColor: "white",
+          ...buttonStyle,
           cursor: previousPage ? "pointer" : "default",
-          boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
           opacity: previousPage ? 1 : 0.5,
         }}
       >
@@ -45,17 +53,15 @@ export default function Pagination({
             setPageNumber(index + 1);
           }}
           style={{
-            minWidth: "40px",
-            height: "40px",
-            border: "none",
-            borderRadius: "12px",
+            ...buttonStyle,
             backgroundColor:
-              pageNumber === index + 1 ? "#ff7043" : "white",
+              pageNumber === index + 1
+                ? theme.primary
+                : theme.card,
             color:
-              pageNumber === index + 1 ? "white" : "#333",
-            fontWeight: "bold",
-            cursor: "pointer",
-            boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
+              pageNumber === index + 1
+                ? "#fff"
+                : theme.text,
           }}
         >
           {index + 1}
@@ -69,13 +75,8 @@ export default function Pagination({
           setPageNumber((p) => p + 1);
         }}
         style={{
-          width: "40px",
-          height: "40px",
-          border: "none",
-          borderRadius: "12px",
-          backgroundColor: "white",
+          ...buttonStyle,
           cursor: nextPage ? "pointer" : "default",
-          boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
           opacity: nextPage ? 1 : 0.5,
         }}
       >

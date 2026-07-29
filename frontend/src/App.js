@@ -4,8 +4,9 @@ import RecipeCard from "./components/RecipeCard";
 import Header from "./components/Header";
 import Filters from "./components/Filters";
 import Pagination from "./components/Pagination";
-import { API_URL } from "./config";
+import { API_URL, PAGE_SIZE } from "./config";
 import { getCategoryIcon } from "./utils/recipeHelpers";
+import { lightTheme, darkTheme } from "./theme";
 
 
 function App() {
@@ -19,8 +20,12 @@ function App() {
   const [previousPage, setPreviousPage] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [darkMode, setDarkMode] = useState(() => {
+    return localStorage.getItem("darkMode") === "true";
+  });
   
-  
+  const theme = darkMode ? darkTheme : lightTheme;
+
   const fetchRecipes = (page = null) => {
     let url;
 
@@ -64,7 +69,7 @@ function App() {
         setRecipes(data.results || []);
         setNextPage(data.next);
         setPreviousPage(data.previous);
-        setTotalPages(Math.ceil(data.count / 15));
+        setTotalPages(Math.ceil(data.count / PAGE_SIZE));
       })
       .catch((err) => console.error(err));
   };
@@ -92,17 +97,27 @@ function App() {
     setPageNumber(1);
   }, [search, difficulty, category, order]);
 
+  useEffect(() => {
+    localStorage.setItem("darkMode", darkMode);
+  }, [darkMode]);
+
 
   return (
     <div
       style={{
         padding: "20px",
         minHeight: "100vh",
-        background: "linear-gradient(180deg, #f8f1e7 0%, #f4ece1 100%)",
+        background: theme.gradient,
+        color: theme.text,
         fontFamily: "Arial",
       }}
     >
-      <Header recipes={recipes} />
+      <Header
+        recipes={recipes}
+        theme={theme}
+        darkMode={darkMode}
+        setDarkMode={setDarkMode}
+      />
 
 
       {/* 🔹 buscador + filtros */}
@@ -116,6 +131,7 @@ function App() {
         setCategory={setCategory}
         order={order}
         setOrder={setOrder}
+        theme={theme}
       />
 
       {/* 🔹 recetas */}
@@ -134,6 +150,7 @@ function App() {
             onOpen={setSelectedRecipe}
             likeRecipe={likeRecipe}
             getCategoryIcon={getCategoryIcon}
+            theme={theme}
           />
         ))} 
       </div>
@@ -146,12 +163,14 @@ function App() {
         nextPage={nextPage}
         fetchRecipes={fetchRecipes}
         setPageNumber={setPageNumber}
+        theme={theme}
       />
 
       {selectedRecipe && (
         <RecipeModal
           recipe={selectedRecipe}
           onClose={() => setSelectedRecipe(null)}
+          theme={theme}
         />
       )}
     </div>

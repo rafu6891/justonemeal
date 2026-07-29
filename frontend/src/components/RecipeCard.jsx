@@ -8,14 +8,16 @@ export default function RecipeCard({
   onOpen,
   likeRecipe,
   getCategoryIcon,
+  theme,
 }) {
   return (
     <div
       style={{
-        backgroundColor: "#fafafa",
+        backgroundColor: theme.card,
+        border: `1px solid ${theme.border}`,
         borderRadius: "18px",
         padding: "20px",
-        boxShadow: "0 6px 18px rgba(0,0,0,0.12)",
+        boxShadow: theme.shadow,
         transition: "all 0.2s ease",
       }}
       onMouseEnter={(e) => {
@@ -23,8 +25,7 @@ export default function RecipeCard({
       }}
       onMouseLeave={(e) => {
         e.currentTarget.style.transform = "translateY(0)";
-        e.currentTarget.style.boxShadow =
-          "0 6px 18px rgba(0,0,0,0.12)";
+        e.currentTarget.style.boxShadow = theme.shadow;
       }}
     >
       {recipe.image ? (
@@ -44,12 +45,13 @@ export default function RecipeCard({
           style={{
             width: "100%",
             height: "170px",
-            backgroundColor: "#f0f0f0",
+            backgroundColor: theme.surface,
             borderRadius: "12px",
             marginBottom: "15px",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
+            border: `1px solid ${theme.border}`,
           }}
         >
           <img
@@ -67,7 +69,7 @@ export default function RecipeCard({
         style={{
           margin: "0 0 12px 0",
           fontSize: "24px",
-          color: "#222",
+          color: theme.text,
         }}
       >
         {recipe.title}
@@ -75,7 +77,7 @@ export default function RecipeCard({
 
       <p
         style={{
-          color: "#666",
+          color: theme.secondaryText,
           marginBottom: "15px",
         }}
       >
@@ -108,6 +110,7 @@ export default function RecipeCard({
             fontSize: "20px",
             cursor: "pointer",
             userSelect: "none",
+            color: theme.text,
           }}
           onClick={(e) => {
             e.stopPropagation();
@@ -131,10 +134,11 @@ export default function RecipeCard({
               style={{
                 padding: "4px 8px",
                 borderRadius: "999px",
-                backgroundColor: "#f0f0f0",
+                backgroundColor: theme.surface,
+                border: `1px solid ${theme.border}`,
                 fontSize: "11px",
                 fontWeight: "bold",
-                color: "#666",
+                color: theme.secondaryText,
               }}
             >
               {getCategoryIcon(category)} {category}
@@ -151,7 +155,7 @@ export default function RecipeCard({
           padding: "12px",
           border: "none",
           borderRadius: "12px",
-          backgroundColor: "#ff7043",
+          backgroundColor: theme.primary,
           color: "white",
           cursor: "pointer",
           fontWeight: "bold",

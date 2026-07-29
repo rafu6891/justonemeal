@@ -8,7 +8,29 @@ export default function Filters({
   setCategory,
   order,
   setOrder,
+  theme,
 }) {
+  const inputStyle = {
+    padding: "12px",
+    borderRadius: "10px",
+    border: `1px solid ${theme.border}`,
+    backgroundColor: theme.surface,
+    color: theme.text,
+    minWidth: "220px",
+    fontSize: "16px",
+    outline: "none",
+  };
+
+  const selectStyle = {
+    padding: "12px 16px",
+    borderRadius: "14px",
+    border: `1px solid ${theme.border}`,
+    backgroundColor: theme.surface,
+    color: theme.text,
+    fontWeight: "600",
+    outline: "none",
+  };
+
   return (
     <div
       style={{
@@ -23,13 +45,7 @@ export default function Filters({
         placeholder="Buscar receta..."
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        style={{
-          padding: "12px",
-          borderRadius: "10px",
-          border: "1px solid #ccc",
-          minWidth: "220px",
-          fontSize: "16px",
-        }}
+        style={inputStyle}
       />
 
       <button
@@ -38,8 +54,8 @@ export default function Filters({
           padding: "12px 18px",
           borderRadius: "10px",
           border: "none",
-          backgroundColor: "#ff7043",
-          color: "white",
+          backgroundColor: theme.primary,
+          color: "#fff",
           cursor: "pointer",
           fontSize: "16px",
           fontWeight: "bold",
@@ -51,13 +67,7 @@ export default function Filters({
       <select
         value={difficulty}
         onChange={(e) => setDifficulty(e.target.value)}
-        style={{
-          padding: "12px 16px",
-          borderRadius: "14px",
-          border: "1px solid #ddd",
-          backgroundColor: "white",
-          fontWeight: "600",
-        }}
+        style={selectStyle}
       >
         <option value="">Dificultad</option>
         <option value="easy">Fácil</option>
@@ -68,14 +78,7 @@ export default function Filters({
       <select
         value={category}
         onChange={(e) => setCategory(e.target.value)}
-        style={{
-          padding: "12px 16px",
-          borderRadius: "14px",
-          border: "none",
-          boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
-          backgroundColor: "white",
-          fontWeight: "600",
-        }}
+        style={selectStyle}
       >
         <option value="">🍽️ Categorías</option>
         <option value="Desayuno">🍳 Desayuno</option>
@@ -88,13 +91,7 @@ export default function Filters({
       <select
         value={order}
         onChange={(e) => setOrder(e.target.value)}
-        style={{
-          padding: "12px 16px",
-          borderRadius: "14px",
-          border: "1px solid #ddd",
-          backgroundColor: "white",
-          fontWeight: "600",
-        }}
+        style={selectStyle}
       >
         <option value="">Ordenar</option>
         <option value="-likes">Más likes ❤️</option>

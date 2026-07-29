@@ -5,7 +5,11 @@ import {
   getDifficultyColor,
 } from "../utils/recipeHelpers";
 
-export default function RecipeModal({ recipe, onClose }) {
+export default function RecipeModal({
+  recipe,
+  onClose,
+  theme,
+}) {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
   useEffect(() => {
@@ -36,7 +40,8 @@ export default function RecipeModal({ recipe, onClose }) {
         onClick={(e) => e.stopPropagation()}
         style={{
           position: "relative",
-          backgroundColor: "white",
+          backgroundColor: theme.card,
+          border: `1px solid ${theme.border}`,
           width: "900px",
           maxWidth: "100%",
           maxHeight: "90vh",
@@ -63,8 +68,7 @@ export default function RecipeModal({ recipe, onClose }) {
             style={{
               width: "100%",
               height: isMobile ? "220px" : "320px",
-              background:
-                "linear-gradient(135deg, #f7f2ea, #efe4d3)",
+              background: theme.surface,
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
@@ -94,7 +98,10 @@ export default function RecipeModal({ recipe, onClose }) {
             height: "42px",
             border: "none",
             borderRadius: "50%",
-            background: "white",
+            background: theme.card,
+            color: theme.text,
+            border: `1px solid ${theme.border}`,
+            boxShadow: theme.shadow,
             cursor: "pointer",
             fontSize: "20px",
             boxShadow: "0 2px 10px rgba(0,0,0,.2)",
@@ -114,7 +121,7 @@ export default function RecipeModal({ recipe, onClose }) {
               marginTop: 0,
               marginBottom: "15px",
               fontSize: isMobile ? "28px" : "34px",
-              color: "#333",
+              color: theme.text,
             }}
           >
             {recipe.title}
@@ -133,6 +140,7 @@ export default function RecipeModal({ recipe, onClose }) {
             <span
               style={{
                 fontWeight: "600",
+                color: theme.text,
               }}
             >
               ❤️ {recipe.likes}
@@ -141,6 +149,7 @@ export default function RecipeModal({ recipe, onClose }) {
             <span
               style={{
                 fontWeight: "600",
+                color: theme.text,
               }}
             >
               ⏱ {recipe.time_minutes} min
@@ -165,7 +174,7 @@ export default function RecipeModal({ recipe, onClose }) {
           <hr
             style={{
               border: "none",
-              borderTop: "1px solid #eee",
+              borderTop:`1px solid ${theme.border}`,
               marginBottom: "30px",
             }}
           />
@@ -186,6 +195,7 @@ export default function RecipeModal({ recipe, onClose }) {
               <h3
                 style={{
                   marginTop: 0,
+                  color: theme.text,
                 }}
               >
                 🥖 Ingredientes
@@ -196,6 +206,7 @@ export default function RecipeModal({ recipe, onClose }) {
                   style={{
                     paddingLeft: "20px",
                     lineHeight: "2",
+                    color: theme.text,
                   }}
                 >
                   {recipe.ingredients.map(
@@ -226,7 +237,9 @@ export default function RecipeModal({ recipe, onClose }) {
                   )}
                 </ul>
               ) : (
-                <p>Sin ingredientes.</p>
+                <p style={{ color: theme.secondaryText }}>
+                  Sin ingredientes.
+                </p>
               )}
             </div>
 
@@ -235,6 +248,7 @@ export default function RecipeModal({ recipe, onClose }) {
               <h3
                 style={{
                   marginTop: 0,
+                  color: theme.text,
                 }}
               >
                 👨‍🍳 Preparación
@@ -245,7 +259,7 @@ export default function RecipeModal({ recipe, onClose }) {
                   style={{
                     paddingLeft: "22px",
                     lineHeight: "1.9",
-                    color: "#555",
+                    color: theme.secondaryText,
                   }}
                 >
                   {recipe.instructions
@@ -263,7 +277,9 @@ export default function RecipeModal({ recipe, onClose }) {
                     ))}
                 </ol>
               ) : (
-                <p>Sin instrucciones.</p>
+                <p style={{ color: theme.secondaryText }}>
+                  Sin instrucciones.
+                </p>
               )}
             </div>
           </div>
