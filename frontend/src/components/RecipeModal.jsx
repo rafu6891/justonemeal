@@ -4,12 +4,14 @@ import {
   getDifficultyLabel,
   getDifficultyColor,
 } from "../utils/recipeHelpers";
+import { useTheme } from "../context/ThemeContext";
 
 export default function RecipeModal({
   recipe,
   onClose,
-  theme,
 }) {
+  const { theme } = useTheme();
+  
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
   useEffect(() => {

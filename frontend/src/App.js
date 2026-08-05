@@ -6,7 +6,7 @@ import Filters from "./components/Filters";
 import Pagination from "./components/Pagination";
 import { API_URL, PAGE_SIZE } from "./config";
 import { getCategoryIcon } from "./utils/recipeHelpers";
-import { lightTheme, darkTheme } from "./theme";
+import { useTheme } from "./context/ThemeContext";
 
 
 function App() {
@@ -20,11 +20,7 @@ function App() {
   const [previousPage, setPreviousPage] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [darkMode, setDarkMode] = useState(() => {
-    return localStorage.getItem("darkMode") === "true";
-  });
   
-  const theme = darkMode ? darkTheme : lightTheme;
 
   const fetchRecipes = (page = null) => {
     let url;
@@ -97,9 +93,7 @@ function App() {
     setPageNumber(1);
   }, [search, difficulty, category, order]);
 
-  useEffect(() => {
-    localStorage.setItem("darkMode", darkMode);
-  }, [darkMode]);
+  const { theme, darkMode, setDarkMode } = useTheme();
 
 
   return (
@@ -112,12 +106,7 @@ function App() {
         fontFamily: "Arial",
       }}
     >
-      <Header
-        recipes={recipes}
-        theme={theme}
-        darkMode={darkMode}
-        setDarkMode={setDarkMode}
-      />
+      <Header recipes={recipes}/>
 
 
       {/* 🔹 buscador + filtros */}
@@ -131,7 +120,6 @@ function App() {
         setCategory={setCategory}
         order={order}
         setOrder={setOrder}
-        theme={theme}
       />
 
       {/* 🔹 recetas */}
@@ -150,7 +138,6 @@ function App() {
             onOpen={setSelectedRecipe}
             likeRecipe={likeRecipe}
             getCategoryIcon={getCategoryIcon}
-            theme={theme}
           />
         ))} 
       </div>
@@ -163,14 +150,12 @@ function App() {
         nextPage={nextPage}
         fetchRecipes={fetchRecipes}
         setPageNumber={setPageNumber}
-        theme={theme}
       />
 
       {selectedRecipe && (
         <RecipeModal
           recipe={selectedRecipe}
           onClose={() => setSelectedRecipe(null)}
-          theme={theme}
         />
       )}
     </div>

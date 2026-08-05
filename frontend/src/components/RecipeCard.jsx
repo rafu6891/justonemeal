@@ -3,13 +3,16 @@ import {
   getDifficultyColor,
 } from "../utils/recipeHelpers";
 
+import { useTheme } from "../context/ThemeContext";
+
 export default function RecipeCard({
   recipe,
   onOpen,
   likeRecipe,
   getCategoryIcon,
-  theme,
 }) {
+  const { theme } = useTheme();
+  
   return (
     <div
       style={{

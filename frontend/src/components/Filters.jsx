@@ -1,3 +1,4 @@
+import { useTheme } from "../context/ThemeContext";
 export default function Filters({
   search,
   setSearch,
@@ -8,8 +9,9 @@ export default function Filters({
   setCategory,
   order,
   setOrder,
-  theme,
 }) {
+  const { theme } = useTheme();
+  
   const inputStyle = {
     padding: "12px",
     borderRadius: "10px",

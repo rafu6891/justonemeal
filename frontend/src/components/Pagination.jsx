@@ -1,3 +1,5 @@
+import { useTheme } from "../context/ThemeContext";
+
 export default function Pagination({
   pageNumber,
   totalPages,
@@ -5,8 +7,9 @@ export default function Pagination({
   nextPage,
   fetchRecipes,
   setPageNumber,
-  theme,
 }) {
+  const { theme } = useTheme();
+  
   const buttonStyle = {
     width: "40px",
     height: "40px",

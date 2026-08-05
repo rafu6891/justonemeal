@@ -1,9 +1,7 @@
-export default function Header({
-  recipes,
-  theme,
-  darkMode,
-  setDarkMode,
-}) {
+import { useTheme } from "../context/ThemeContext";
+export default function Header({recipes}) {
+  const { theme, darkMode, setDarkMode } = useTheme();
+
   return (
     <div
       style={{
