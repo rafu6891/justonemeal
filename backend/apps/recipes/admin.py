@@ -41,10 +41,12 @@ class IngredientAdmin(admin.ModelAdmin):
         "name",
         "unit",
         "to_taste",
+        "is_pantry_item",
     )
 
     list_filter = (
         "to_taste",
+        "is_pantry_item",
     )
 
     search_fields = (

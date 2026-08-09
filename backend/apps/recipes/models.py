@@ -79,6 +79,11 @@ class Ingredient(models.Model):
 
     to_taste = models.BooleanField(default=False)
 
+    is_pantry_item = models.BooleanField(
+    default=False,
+    verbose_name="Producto de despensa",
+    )
+
     def clean(self):
         if Ingredient.objects.filter(
             name__iexact=self.name
