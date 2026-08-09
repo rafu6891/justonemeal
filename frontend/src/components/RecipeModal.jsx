@@ -5,13 +5,16 @@ import {
   getDifficultyColor,
 } from "../utils/recipeHelpers";
 import { useTheme } from "../context/ThemeContext";
+import { useMealPlan } from "../context/MealPlanContext";
 
 export default function RecipeModal({
   recipe,
   onClose,
 }) {
   const { theme } = useTheme();
-  
+  const {  addRecipe,  recipes: mealPlan,} = useMealPlan();
+  const isInPlan = mealPlan.some(  (r) => r.id === recipe.id);
+
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
   useEffect(() => {
@@ -88,6 +91,32 @@ export default function RecipeModal({
             />
           </div>
         )}
+
+        {/* Botón añadir */}
+        <button
+          onClick={() => addRecipe(recipe)}
+          disabled={isInPlan}
+          style={{
+            width: "100%",
+            marginTop: "30px",
+            padding: "14px",
+            border: "none",
+            borderRadius: "14px",
+            backgroundColor: isInPlan
+              ? theme.success
+              : theme.primary,
+            color: "white",
+            fontSize: "16px",
+            fontWeight: "bold",
+            cursor: isInPlan ? "default" : "pointer",
+            opacity: isInPlan ? 0.8 : 1,
+            transition: "0.2s",
+          }}
+        >
+          {isInPlan
+            ? "✔ En el plan"
+            : "➕ Añadir al plan"}
+        </button>
 
         {/* Botón cerrar */}
         <button

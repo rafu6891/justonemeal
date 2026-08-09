@@ -1,8 +1,17 @@
 import { useTheme } from "../context/ThemeContext";
-export default function Header({recipes}) {
+import { useMealPlan } from "../context/MealPlanContext";
+
+export default function Header({
+    recipes,
+    onOpenMealPlan,
+}) {
   const { theme, darkMode, setDarkMode } = useTheme();
+  const {
+            recipes: mealPlan,
+        } = useMealPlan();
 
   return (
+
     <div
       style={{
         position: "relative",
@@ -23,26 +32,6 @@ export default function Header({recipes}) {
         boxShadow: theme.shadow,
       }}
     >
-      <button
-        onClick={() => setDarkMode(!darkMode)}
-        style={{
-          position: "absolute",
-          top: "20px",
-          right: "20px",
-          width: "48px",
-          height: "48px",
-          borderRadius: "50%",
-          border: "none",
-          cursor: "pointer",
-          fontSize: "22px",
-          background: theme.card,
-          color: theme.text,
-          boxShadow: theme.shadow,
-          transition: "0.3s",
-        }}
-      >
-        {darkMode ? "☀️" : "🌙"}
-      </button>
 
       <img
         src="/images/logo-jom-icon.png"
@@ -76,20 +65,28 @@ export default function Header({recipes}) {
         Recetas sencillas para cualquier día.
       </p>
 
+<div
+  style={{
+    marginTop: "25px",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    gap: "18px",
+  }}
+>
       <div
-        style={{
-          display: "inline-block",
-          backgroundColor: darkMode
-            ? "rgba(255,255,255,0.12)"
-            : "rgba(255,255,255,0.25)",
-          padding: "10px 18px",
-          borderRadius: "999px",
-          fontSize: "20px",
-          fontWeight: "600",
-          color: theme.text,
-        }}
-      >
-        {recipes.length} recetas disponibles
+          style={{
+            display: "inline-block",
+            backgroundColor: "rgba(255,255,255,0.25)",
+            padding: "10px 18px",
+            borderRadius: "999px",
+            fontSize: "20px",
+            fontWeight: "600",
+            color: "#3b2a1a",
+          }}
+        >
+          {recipes.length} recetas disponibles
+        </div>
       </div>
     </div>
   );

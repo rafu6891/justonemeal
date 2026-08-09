@@ -7,6 +7,8 @@ import Pagination from "./components/Pagination";
 import { API_URL, PAGE_SIZE } from "./config";
 import { getCategoryIcon } from "./utils/recipeHelpers";
 import { useTheme } from "./context/ThemeContext";
+import MealPlanModal from "./components/MealPlanModal";
+import TopBar from "./components/TopBar";
 
 
 function App() {
@@ -15,6 +17,7 @@ function App() {
   const [difficulty, setDifficulty] = useState("");
   const [order, setOrder] = useState("");
   const [selectedRecipe, setSelectedRecipe] = useState(null);
+  const [showMealPlan, setShowMealPlan] = useState(false);
   const [category, setCategory] = useState("");
   const [nextPage, setNextPage] = useState(null);
   const [previousPage, setPreviousPage] = useState(null);
@@ -106,7 +109,11 @@ function App() {
         fontFamily: "Arial",
       }}
     >
-      <Header recipes={recipes}/>
+      <TopBar
+        onOpenMealPlan={() => setShowMealPlan(true)}
+      />
+
+      <Header recipes={recipes} />
 
 
       {/* 🔹 buscador + filtros */}
@@ -157,6 +164,12 @@ function App() {
           recipe={selectedRecipe}
           onClose={() => setSelectedRecipe(null)}
         />
+      )}
+
+      {showMealPlan && (
+          <MealPlanModal
+              onClose={() => setShowMealPlan(false)}
+          />
       )}
     </div>
   );

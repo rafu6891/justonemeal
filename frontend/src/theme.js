@@ -9,6 +9,20 @@ export const lightTheme = {
   primary: "#8B4513",
   primaryHover: "#A0522D",
 
+  success: "#4CAF50",
+  warning: "#F39C12",
+  danger: "#E74C3C",
+
+  like: "#ff4d6d",
+  favorite: "#ff7043",
+
+  tagBackground: "#f3f3f3",
+  tagText: "#666666",
+
+  ingredientBackground: "#f9f9f9",
+
+  modalOverlay: "rgba(0,0,0,0.55)",
+
   border: "#dddddd",
 
   shadow: "0 4px 10px rgba(0,0,0,0.15)",
@@ -26,6 +40,20 @@ export const darkTheme = {
 
   primary: "#d9a35b",
   primaryHover: "#efb86d",
+
+  success: "#66BB6A",
+  warning: "#F4B942",
+  danger: "#EF5350",
+
+  like: "#ff6b81",
+  favorite: "#ff9f43",
+
+  tagBackground: "#383838",
+  tagText: "#dddddd",
+
+  ingredientBackground: "#333333",
+
+  modalOverlay: "rgba(0,0,0,0.75)",
 
   border: "#444444",
 
