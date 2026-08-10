@@ -1,6 +1,6 @@
 import { useMealPlan } from "../context/MealPlanContext";
 import { useTheme } from "../context/ThemeContext";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function MealPlanModal({ onClose }) {
   const {
@@ -11,9 +11,18 @@ export default function MealPlanModal({ onClose }) {
 } = useMealPlan();
   const { theme } = useTheme();
   const [showShoppingList, setShowShoppingList] = useState(false);
-  const [checkedIngredients, setCheckedIngredients] = useState({});
+  const [checkedIngredients, setCheckedIngredients] = useState(() => {
+  const saved = localStorage.getItem("checkedIngredients");
+    return saved ? JSON.parse(saved) : {};
+  });
+  useEffect(() => {
+    localStorage.setItem(
+      "checkedIngredients",
+      JSON.stringify(checkedIngredients)
+    );
+  }, [checkedIngredients]);
   const shoppingList = {};
-const pantryList = {};
+  const pantryList = {};
 
 recipes.forEach((recipe) => {
   const servings = recipe.servings || 1;
