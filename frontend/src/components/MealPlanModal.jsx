@@ -135,42 +135,45 @@ if (showShoppingList) {
               lineHeight: "2",
             }}
           >
-            {shoppingIngredients.map((ingredient, index) => (
-              <li
-                key={index}
-                style={{
-                  listStyle: "none",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "10px",
-                  marginBottom: "8px",
-                  textDecoration: checkedIngredients[`shopping-${index}`]
-                    ? "line-through"
-                    : "none",
-                  opacity: checkedIngredients[`shopping-${index}`]
-                    ? 0.5
-                    : 1,
-                }}
-              >
-                <input
-                  type="checkbox"
-                  checked={!!checkedIngredients[`shopping-${index}`]}
-                  onChange={() =>
-                    setCheckedIngredients((prev) => ({
-                      ...prev,
-                      [`shopping-${index}`]:
-                        !prev[`shopping-${index}`],
-                    }))
-                  }
-                />
+            {shoppingIngredients.map((ingredient) => {
+              const ingredientKey = `shopping-${ingredient.name}-${ingredient.unit}`;
 
-                <span>
-                  {ingredient.to_taste
-                    ? `${ingredient.name} al gusto`
-                    : `${ingredient.quantity} ${ingredient.unit_display} ${ingredient.name}`}
-                </span>
-              </li>
-            ))}
+              return (
+                <li
+                  key={ingredientKey}
+                  style={{
+                    listStyle: "none",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "10px",
+                    marginBottom: "8px",
+                    textDecoration: checkedIngredients[ingredientKey]
+                      ? "line-through"
+                      : "none",
+                    opacity: checkedIngredients[ingredientKey]
+                      ? 0.5
+                      : 1,
+                  }}
+                >
+                  <input
+                    type="checkbox"
+                    checked={!!checkedIngredients[ingredientKey]}
+                    onChange={() =>
+                      setCheckedIngredients((prev) => ({
+                        ...prev,
+                        [ingredientKey]: !prev[ingredientKey],
+                      }))
+                    }
+                  />
+
+                  <span>
+                    {ingredient.to_taste
+                      ? `${ingredient.name} al gusto`
+                      : `${ingredient.quantity} ${ingredient.unit_display} ${ingredient.name}`}
+                  </span>
+                </li>
+              );
+            })}
           </ul>
         )}
 
@@ -190,42 +193,45 @@ if (showShoppingList) {
                 lineHeight: "2",
               }}
             >
-              {pantryIngredients.map((ingredient, index) => (
-                <li
-                  key={index}
-                  style={{
-                    listStyle: "none",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "10px",
-                    marginBottom: "8px",
-                    textDecoration: checkedIngredients[`pantry-${index}`]
-                      ? "line-through"
-                      : "none",
-                    opacity: checkedIngredients[`pantry-${index}`]
-                      ? 0.5
-                      : 1,
-                  }}
-                >
-                  <input
-                    type="checkbox"
-                    checked={!!checkedIngredients[`pantry-${index}`]}
-                    onChange={() =>
-                      setCheckedIngredients((prev) => ({
-                        ...prev,
-                        [`pantry-${index}`]:
-                          !prev[`pantry-${index}`],
-                      }))
-                    }
-                  />
+              {pantryIngredients.map((ingredient) => {
+                  const ingredientKey = `pantry-${ingredient.name}-${ingredient.unit}`;
 
-                  <span>
-                    {ingredient.to_taste
-                      ? `${ingredient.name} al gusto`
-                      : `${ingredient.quantity} ${ingredient.unit_display} ${ingredient.name}`}
-                  </span>
-                </li>
-              ))}
+                  return (
+                    <li
+                      key={ingredientKey}
+                      style={{
+                        listStyle: "none",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "10px",
+                        marginBottom: "8px",
+                        textDecoration: checkedIngredients[ingredientKey]
+                          ? "line-through"
+                          : "none",
+                        opacity: checkedIngredients[ingredientKey]
+                          ? 0.5
+                          : 1,
+                      }}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={!!checkedIngredients[ingredientKey]}
+                        onChange={() =>
+                          setCheckedIngredients((prev) => ({
+                            ...prev,
+                            [ingredientKey]: !prev[ingredientKey],
+                          }))
+                        }
+                      />
+
+                      <span>
+                        {ingredient.to_taste
+                          ? `${ingredient.name} al gusto`
+                          : `${ingredient.quantity} ${ingredient.unit_display} ${ingredient.name}`}
+                      </span>
+                    </li>
+                  );
+                })}
             </ul>
           </>
         )}
