@@ -31,6 +31,44 @@ recipes.forEach((recipe) => {
 const shoppingIngredients = Object.values(shoppingList);
 const pantryIngredients = Object.values(pantryList);
 
+const shareShoppingList = async () => {
+  const shoppingText = shoppingIngredients
+    .map((ingredient) =>
+      ingredient.to_taste
+        ? `• ${ingredient.name} al gusto`
+        : `• ${ingredient.quantity} ${ingredient.unit_display} ${ingredient.name}`
+    )
+    .join("\n");
+
+  const pantryText = pantryIngredients
+    .map((ingredient) =>
+      ingredient.to_taste
+        ? `• ${ingredient.name} al gusto`
+        : `• ${ingredient.quantity} ${ingredient.unit_display} ${ingredient.name}`
+    )
+    .join("\n");
+
+  let text = "🛒 Lista de la compra\n\n";
+
+  if (shoppingText) {
+    text += `🛒 Compra\n${shoppingText}`;
+  }
+
+  if (pantryText) {
+    text += `\n\n🧂 Productos de despensa\n${pantryText}`;
+  }
+
+  if (navigator.share) {
+    await navigator.share({
+      title: "Lista de la compra - JustOneMeal",
+      text: text,
+    });
+  } else {
+    await navigator.clipboard.writeText(text);
+    alert("Lista copiada al portapapeles");
+  }
+};
+
 if (showShoppingList) {
   return (
     <div
@@ -168,6 +206,25 @@ if (showShoppingList) {
           </>
         )}
 
+        <button
+          onClick={shareShoppingList}
+          style={{
+            width: "100%",
+            marginTop: "15px",
+            padding: "14px",
+            border: "none",
+            borderRadius: "12px",
+            background: theme.card,
+            color: theme.text,
+            cursor: "pointer",
+            fontWeight: "bold",
+            fontSize: "15px",
+            boxShadow: theme.shadow,
+          }}
+        >
+          📤 Compartir lista
+        </button>
+        
         <button
           onClick={() => setShowShoppingList(false)}
           style={{
