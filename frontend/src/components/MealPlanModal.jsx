@@ -3,7 +3,12 @@ import { useTheme } from "../context/ThemeContext";
 import { useState } from "react";
 
 export default function MealPlanModal({ onClose }) {
-  const { recipes, removeRecipe, clearPlan } = useMealPlan();
+  const {
+  recipes,
+  removeRecipe,
+  clearPlan,
+  updateServings,
+} = useMealPlan();
   const { theme } = useTheme();
   const [showShoppingList, setShowShoppingList] = useState(false);
   const [checkedIngredients, setCheckedIngredients] = useState({});
@@ -11,6 +16,8 @@ export default function MealPlanModal({ onClose }) {
 const pantryList = {};
 
 recipes.forEach((recipe) => {
+  const servings = recipe.servings || 1;
+
   recipe.ingredients?.forEach((ingredient) => {
     const list = ingredient.is_pantry_item
       ? pantryList
@@ -18,12 +25,18 @@ recipes.forEach((recipe) => {
 
     const key = `${ingredient.name}-${ingredient.unit}`;
 
+    // Los productos de despensa NO se multiplican
+    const quantity = ingredient.is_pantry_item
+      ? ingredient.quantity
+      : ingredient.quantity * servings;
+
     if (!list[key]) {
       list[key] = {
         ...ingredient,
+        quantity: quantity,
       };
     } else if (!ingredient.to_taste) {
-      list[key].quantity += ingredient.quantity;
+      list[key].quantity += quantity;
     }
   });
 });
@@ -89,6 +102,8 @@ if (showShoppingList) {
         style={{
           width: "600px",
           maxWidth: "100%",
+          maxHeight: "90vh",
+          overflowY: "auto",
           background: theme.card,
           borderRadius: "20px",
           padding: "30px",
@@ -224,7 +239,7 @@ if (showShoppingList) {
         >
           📤 Compartir lista
         </button>
-        
+
         <button
           onClick={() => setShowShoppingList(false)}
           style={{
@@ -280,31 +295,130 @@ if (showShoppingList) {
         ) : (
           <>
             {recipes.map((recipe) => (
-              <div
-                key={recipe.id}
+          <div
+            key={recipe.id}
+            style={{
+              padding: "12px 0",
+              borderBottom: `1px solid ${theme.border}`,
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <span
                 style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  padding: "12px 0",
-                  borderBottom: `1px solid ${theme.border}`,
+                  fontWeight: "600",
                 }}
               >
-                <span>{recipe.title}</span>
+                {recipe.title}
+              </span>
 
-                <button
-                  onClick={() => removeRecipe(recipe.id)}
-                  style={{
-                    border: "none",
-                    background: "transparent",
-                    cursor: "pointer",
-                    fontSize: "18px",
-                  }}
-                >
-                  ❌
-                </button>
-              </div>
-            ))}
+              <button
+                onClick={() => removeRecipe(recipe.id)}
+                style={{
+                  border: "none",
+                  background: "transparent",
+                  cursor: "pointer",
+                  fontSize: "18px",
+                }}
+              >
+                ❌
+              </button>
+            </div>
+
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "12px",
+                marginTop: "10px",
+              }}
+            >
+              <span
+                style={{
+                  fontSize: "14px",
+                  color: theme.secondaryText,
+                }}
+              >
+                👥 Personas:
+              </span>
+
+              <button
+                onClick={() =>
+                  updateServings(
+                    recipe.id,
+                    (recipe.servings || 1) - 1
+                  )
+                }
+                disabled={(recipe.servings || 1) <= 1}
+                style={{
+                  width: "32px",
+                  height: "32px",
+                  border: "none",
+                  borderRadius: "8px",
+                  background: theme.surface,
+                  color: theme.text,
+                  cursor:
+                    (recipe.servings || 1) > 1
+                      ? "pointer"
+                      : "default",
+                  opacity:
+                    (recipe.servings || 1) > 1
+                      ? 1
+                      : 0.5,
+                  fontSize: "18px",
+                  fontWeight: "bold",
+                }}
+              >
+                −
+              </button>
+
+              <span
+                style={{
+                  minWidth: "25px",
+                  textAlign: "center",
+                  fontWeight: "bold",
+                }}
+              >
+                {recipe.servings || 1}
+              </span>
+
+              <button
+                onClick={() =>
+                  updateServings(
+                    recipe.id,
+                    (recipe.servings || 1) + 1
+                  )
+                }
+                disabled={(recipe.servings || 1) >= 6}
+                style={{
+                  width: "32px",
+                  height: "32px",
+                  border: "none",
+                  borderRadius: "8px",
+                  background: theme.surface,
+                  color: theme.text,
+                  cursor:
+                    (recipe.servings || 1) < 6
+                      ? "pointer"
+                      : "default",
+                  opacity:
+                    (recipe.servings || 1) < 6
+                      ? 1
+                      : 0.5,
+                  fontSize: "18px",
+                  fontWeight: "bold",
+                }}
+              >
+                +
+              </button>
+            </div>
+          </div>
+        ))}
 
             <button
               onClick={clearPlan}

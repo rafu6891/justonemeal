@@ -6,7 +6,17 @@ export function MealPlanProvider({ children }) {
   const [recipes, setRecipes] = useState(() => {
     const saved = localStorage.getItem("mealPlan");
 
-    return saved ? JSON.parse(saved) : [];
+    if (!saved) {
+      return [];
+    }
+
+    const parsed = JSON.parse(saved);
+
+    // Compatibilidad con recetas que ya estaban guardadas
+    return parsed.map((recipe) => ({
+      ...recipe,
+      servings: recipe.servings || 1,
+    }));
   });
 
   useEffect(() => {
@@ -22,7 +32,13 @@ export function MealPlanProvider({ children }) {
         return prev;
       }
 
-      return [...prev, recipe];
+      return [
+        ...prev,
+        {
+          ...recipe,
+          servings: 1,
+        },
+      ];
     });
   };
 
@@ -36,6 +52,19 @@ export function MealPlanProvider({ children }) {
     setRecipes([]);
   };
 
+  const updateServings = (recipeId, servings) => {
+    setRecipes((prev) =>
+      prev.map((recipe) =>
+        recipe.id === recipeId
+          ? {
+              ...recipe,
+              servings: Math.max(1, Math.min(servings, 6)),
+            }
+          : recipe
+      )
+    );
+  };
+
   return (
     <MealPlanContext.Provider
       value={{
@@ -43,6 +72,7 @@ export function MealPlanProvider({ children }) {
         addRecipe,
         removeRecipe,
         clearPlan,
+        updateServings,
       }}
     >
       {children}
