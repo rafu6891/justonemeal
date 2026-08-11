@@ -136,33 +136,37 @@ export default function ShoppingList({
 
               return (
                 <li
-                  key={ingredientKey}
-                  style={{
-                    listStyle: "none",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "10px",
-                    marginBottom: "8px",
-                    textDecoration:
-                      checkedIngredients[ingredientKey]
+                    key={ingredientKey}
+                    style={{
+                        listStyle: "none",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "12px",
+                        marginBottom: "10px",
+                        padding: "12px 14px",
+                        borderRadius: "12px",
+                        background: theme.surface,
+                        boxShadow: theme.shadow,
+                        cursor: "pointer",
+                        textDecoration: checkedIngredients[ingredientKey]
                         ? "line-through"
                         : "none",
-                    opacity:
-                      checkedIngredients[ingredientKey]
+                        opacity: checkedIngredients[ingredientKey]
                         ? 0.5
                         : 1,
-                  }}
+                    }}
+                    onClick={() =>
+                        setCheckedIngredients((prev) => ({
+                        ...prev,
+                        [ingredientKey]: !prev[ingredientKey],
+                        }))
+                    }
                 >
                   <input
                     type="checkbox"
                     checked={!!checkedIngredients[ingredientKey]}
-                    onChange={() =>
-                      setCheckedIngredients((prev) => ({
-                        ...prev,
-                        [ingredientKey]:
-                          !prev[ingredientKey],
-                      }))
-                    }
+                    onChange={() => {}}
+                    onClick={(e) => e.stopPropagation()}
                   />
 
                   <span>
@@ -199,43 +203,43 @@ export default function ShoppingList({
                   <li
                     key={ingredientKey}
                     style={{
-                      listStyle: "none",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "10px",
-                      marginBottom: "8px",
-                      textDecoration:
-                        checkedIngredients[ingredientKey]
-                          ? "line-through"
-                          : "none",
-                      opacity:
-                        checkedIngredients[ingredientKey]
-                          ? 0.5
-                          : 1,
+                        listStyle: "none",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "12px",
+                        marginBottom: "10px",
+                        padding: "12px 14px",
+                        borderRadius: "12px",
+                        background: theme.surface,
+                        boxShadow: theme.shadow,
+                        cursor: "pointer",
+                        textDecoration: checkedIngredients[ingredientKey]
+                        ? "line-through"
+                        : "none",
+                        opacity: checkedIngredients[ingredientKey]
+                        ? 0.5
+                        : 1,
                     }}
-                  >
-                    <input
-                      type="checkbox"
-                      checked={
-                        !!checkedIngredients[
-                          ingredientKey
-                        ]
-                      }
-                      onChange={() =>
+                    onClick={() =>
                         setCheckedIngredients((prev) => ({
-                          ...prev,
-                          [ingredientKey]:
-                            !prev[ingredientKey],
+                        ...prev,
+                        [ingredientKey]: !prev[ingredientKey],
                         }))
-                      }
+                    }
+                    >
+                    <input
+                        type="checkbox"
+                        checked={!!checkedIngredients[ingredientKey]}
+                        onChange={() => {}}
+                        onClick={(e) => e.stopPropagation()}
                     />
 
                     <span>
-                      {ingredient.to_taste
+                        {ingredient.to_taste
                         ? `${ingredient.name} al gusto`
                         : `${ingredient.quantity} ${ingredient.unit_display} ${ingredient.name}`}
                     </span>
-                  </li>
+                    </li>
                 );
               })}
             </ul>
