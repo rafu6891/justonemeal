@@ -5,6 +5,7 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { ThemeProvider } from "./context/ThemeContext";
 import { MealPlanProvider } from "./context/MealPlanContext";
+import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -19,3 +20,5 @@ root.render(
 );
 
 reportWebVitals();
+
+serviceWorkerRegistration.register();
