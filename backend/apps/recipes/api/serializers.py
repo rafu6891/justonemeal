@@ -11,6 +11,7 @@ class RecipeDetailSerializer(serializers.Serializer):
     title = serializers.CharField()
     time_minutes = serializers.IntegerField()
     difficulty = serializers.CharField()
+    calories = serializers.IntegerField(allow_null=True, required=False)
     servings = serializers.IntegerField()
     ingredients = IngredientOutputSerializer(many=True)
 
@@ -19,3 +20,4 @@ class RecipeListSerializer(serializers.Serializer):
     title = serializers.CharField()
     time_minutes = serializers.IntegerField()
     difficulty = serializers.CharField()
+    calories = serializers.IntegerField(allow_null=True, required=False)

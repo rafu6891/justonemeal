@@ -18,6 +18,19 @@ class RecipeAdmin(admin.ModelAdmin):
         "likes",
     )
 
+    fields = (
+        "title",
+        "description",
+        "instructions",
+        "categories",
+        "time_minutes",
+        "difficulty",
+        "calories",
+        "image",
+        "created_at",
+        "likes",
+    )
+
     list_filter = (
         "difficulty",
     )

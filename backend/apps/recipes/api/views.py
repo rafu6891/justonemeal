@@ -45,6 +45,7 @@ class RecipeDetailAPIView(APIView):
             "id": recipe.id,
             "title": recipe.title,
             "time_minutes": recipe.time_minutes,
+            "calories": recipe.calories,
             "difficulty": recipe.difficulty,
             "servings": servings,
             "ingredients": ingredients,
@@ -184,6 +185,7 @@ class RecipeListAPIView(APIView):
                 "description": recipe.description,
                 "instructions": recipe.instructions,
                 "time_minutes": recipe.time_minutes,
+                "calories": recipe.calories,
                 "difficulty": recipe.difficulty,
                 "categories": [
                     category.name

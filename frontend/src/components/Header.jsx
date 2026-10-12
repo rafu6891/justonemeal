@@ -13,8 +13,11 @@ export default function Header({
   return (
 
     <div
+      className="app-header"
       style={{
         position: "relative",
+        width: "100%",
+        boxSizing: "border-box",
         maxWidth: "900px",
         margin: "0 auto 40px auto",
         padding: "35px 30px",
@@ -34,6 +37,7 @@ export default function Header({
     >
 
       <img
+        className="app-header-logo"
         src="/images/logo-jom-icon.png"
         alt="JustOneMeal"
         style={{
@@ -43,6 +47,7 @@ export default function Header({
       />
 
       <h1
+        className="app-header-title"
         style={{
           margin: 0,
           fontSize: "56px",
@@ -54,6 +59,7 @@ export default function Header({
       </h1>
 
       <p
+        className="app-header-description"
         style={{
           fontSize: "20px",
           marginTop: "15px",

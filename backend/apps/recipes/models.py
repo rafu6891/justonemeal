@@ -64,6 +64,7 @@ class Recipe(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True,)
     likes = models.IntegerField(default=0)
     image = models.ImageField(upload_to="recipes/", blank=True, null=True,)
+    calories = models.PositiveIntegerField(null=True, blank=True,)
 
     def __str__(self):
         return self.title

@@ -9,6 +9,7 @@ import { getCategoryIcon } from "./utils/recipeHelpers";
 import { useTheme } from "./context/ThemeContext";
 import MealPlanModal from "./components/MealPlanModal";
 import TopBar from "./components/TopBar";
+import Footer from "./components/Footer";
 
 
 function App() {
@@ -171,8 +172,10 @@ function App() {
               onClose={() => setShowMealPlan(false)}
           />
       )}
+      <Footer />
     </div>
   );
+  
 }
 
 export default App;

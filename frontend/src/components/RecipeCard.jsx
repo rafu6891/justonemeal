@@ -78,14 +78,22 @@ export default function RecipeCard({
         {recipe.title}
       </h3>
 
-      <p
+      <div
         style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "15px",
           color: theme.secondaryText,
           marginBottom: "15px",
+          flexWrap: "wrap",
         }}
       >
-        ⏱ {recipe.time_minutes} min
-      </p>
+        <span>⏱ {recipe.time_minutes} min</span>
+
+        {recipe.calories != null && (
+          <span>🔥 {recipe.calories} kcal</span>
+        )}
+      </div>
 
       <p
         style={{
