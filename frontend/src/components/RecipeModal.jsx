@@ -303,7 +303,7 @@ export default function RecipeModal({
                           marginBottom: "12px",
                         }}
                       >
-                        {step}
+                        {step.replace(/^\s*\d+\s*[.)-]?\s*/, "")}
                       </li>
                     ))}
                 </ol>

@@ -1,0 +1,166 @@
+[
+  {
+    "title": "Tostada con tomate y aceite de oliva",
+    "description": "Desayuno tradicional español con pan tostado, tomate natural y aceite de oliva virgen extra.",
+    "time_minutes": 10,
+    "difficulty": "easy",
+    "calories": 280,
+    "categories": ["Desayuno"],
+    "image": "tostada-tomate.jpg",
+    "instructions": "1. Tuesta el pan hasta que esté dorado. 2. Ralla el tomate. 3. Extiende el tomate sobre el pan. 4. Añade el aceite de oliva y una pizca de sal.",
+    "ingredients": [
+      {"name": "Pan", "quantity": 2, "unit": "slice", "is_pantry_item": true},
+      {"name": "Tomate natural", "quantity": 100, "unit": "g"},
+      {"name": "Aceite de oliva", "quantity": 1, "unit": "tbsp", "is_pantry_item": true},
+      {"name": "sal", "quantity": 1, "unit": "g", "is_pantry_item": true}
+    ]
+  },
+  {
+    "title": "Tortilla francesa",
+    "description": "Tortilla jugosa de huevo, perfecta para un desayuno rápido.",
+    "time_minutes": 8,
+    "difficulty": "easy",
+    "calories": 220,
+    "categories": ["Desayuno"],
+    "image": "tortilla-francesa.jpg",
+    "instructions": "1. Bate los huevos con una pizca de sal. 2. Calienta el aceite en una sartén. 3. Añade el huevo batido. 4. Cocina a fuego medio y dobla la tortilla cuando esté cuajada a tu gusto.",
+    "ingredients": [
+      {"name": "Huevo", "quantity": 2, "unit": "unit"},
+      {"name": "Aceite de oliva", "quantity": 0.5, "unit": "tbsp", "is_pantry_item": true},
+      {"name": "sal", "quantity": 1, "unit": "g", "is_pantry_item": true}
+    ]
+  },
+  {
+    "title": "Lentejas estofadas",
+    "description": "Lentejas caseras con verduras, un plato tradicional de cuchara.",
+    "time_minutes": 50,
+    "difficulty": "easy",
+    "calories": 420,
+    "categories": ["Comida"],
+    "image": "lentejas-estofadas.jpg",
+    "instructions": "1. Pela y corta la zanahoria, la patata y la cebolla. 2. Pon las lentejas en una olla con las verduras, el ajo, el pimentón y el aceite. 3. Cubre con agua. 4. Cuece a fuego suave hasta que las lentejas estén tiernas, añadiendo agua si hace falta. 5. Ajusta de sal.",
+    "ingredients": [
+      {"name": "Lentejas secas", "quantity": 80, "unit": "g"},
+      {"name": "Zanahoria", "quantity": 60, "unit": "g"},
+      {"name": "Patata", "quantity": 100, "unit": "g"},
+      {"name": "Cebolla", "quantity": 0.5, "unit": "piece"},
+      {"name": "Ajo", "quantity": 1, "unit": "clove"},
+      {"name": "Pimentón dulce", "quantity": 2, "unit": "g"},
+      {"name": "Aceite de oliva", "quantity": 1, "unit": "tbsp", "is_pantry_item": true},
+      {"name": "sal", "quantity": 2, "unit": "g", "is_pantry_item": true}
+    ]
+  },
+  {
+    "title": "Pollo al ajillo",
+    "description": "Pollo dorado con ajo y vino blanco, una receta clásica de la cocina española.",
+    "time_minutes": 35,
+    "difficulty": "medium",
+    "calories": 430,
+    "categories": ["Comida"],
+    "image": "pollo-al-ajillo.jpg",
+    "instructions": "1. Corta el pollo en trozos. 2. Pela y lamina los ajos. 3. Dora el pollo con el aceite. 4. Añade el ajo y cocina unos minutos sin quemarlo. 5. Incorpora el vino blanco y deja reducir hasta que el pollo esté bien cocinado. 6. Ajusta de sal y perejil.",
+    "ingredients": [
+      {"name": "Pollo", "quantity": 200, "unit": "g"},
+      {"name": "Ajo", "quantity": 3, "unit": "clove"},
+      {"name": "Vino blanco", "quantity": 40, "unit": "ml"},
+      {"name": "Aceite de oliva", "quantity": 1, "unit": "tbsp", "is_pantry_item": true},
+      {"name": "Perejil", "quantity": 5, "unit": "g"},
+      {"name": "sal", "quantity": 2, "unit": "g", "is_pantry_item": true}
+    ]
+  },
+  {
+    "title": "Tortilla de patatas individual",
+    "description": "Tortilla española casera de patata y huevo, preparada para una persona.",
+    "time_minutes": 30,
+    "difficulty": "medium",
+    "calories": 450,
+    "categories": ["Cena"],
+    "image": "tortilla-patatas.jpg",
+    "instructions": "1. Pela y corta la patata en láminas finas. 2. Cocina la patata a fuego suave con parte del aceite hasta que esté tierna. 3. Bate los huevos con sal. 4. Escurre la patata y mézclala con el huevo. 5. Cuaja la tortilla en una sartén con un poco de aceite, dándole la vuelta con cuidado.",
+    "ingredients": [
+      {"name": "Patata", "quantity": 200, "unit": "g"},
+      {"name": "Huevo", "quantity": 2, "unit": "unit"},
+      {"name": "Aceite de oliva", "quantity": 2, "unit": "tbsp", "is_pantry_item": true},
+      {"name": "sal", "quantity": 2, "unit": "g", "is_pantry_item": true}
+    ]
+  },
+  {
+    "title": "Merluza a la plancha",
+    "description": "Filete de merluza a la plancha con ajo, limón y perejil.",
+    "time_minutes": 15,
+    "difficulty": "easy",
+    "calories": 230,
+    "categories": ["Cena"],
+    "image": "merluza-plancha.jpg",
+    "instructions": "1. Seca la merluza con papel de cocina. 2. Calienta una sartén con el aceite. 3. Cocina el pescado por ambos lados hasta que esté hecho. 4. Añade el ajo picado al final para que no se queme. 5. Sirve con perejil y zumo de limón.",
+    "ingredients": [
+      {"name": "Merluza", "quantity": 180, "unit": "g"},
+      {"name": "Ajo", "quantity": 1, "unit": "clove"},
+      {"name": "Limón", "quantity": 30, "unit": "g"},
+      {"name": "Aceite de oliva", "quantity": 1, "unit": "tbsp", "is_pantry_item": true},
+      {"name": "Perejil", "quantity": 3, "unit": "g"},
+      {"name": "sal", "quantity": 1, "unit": "g", "is_pantry_item": true}
+    ]
+  },
+  {
+    "title": "Arroz con leche",
+    "description": "Postre tradicional de arroz cocido lentamente en leche con canela y limón.",
+    "time_minutes": 45,
+    "difficulty": "medium",
+    "calories": 320,
+    "categories": ["Postre"],
+    "image": "arroz-con-leche.jpg",
+    "instructions": "1. Calienta la leche con la piel de limón y la canela. 2. Añade el arroz y cocina a fuego muy suave, removiendo con frecuencia. 3. Cuando el arroz esté tierno, incorpora el azúcar. 4. Retira el limón y la canela. 5. Deja templar y refrigera si lo prefieres frío.",
+    "ingredients": [
+      {"name": "Arroz", "quantity": 40, "unit": "g"},
+      {"name": "Leche", "quantity": 250, "unit": "ml"},
+      {"name": "Azúcar", "quantity": 20, "unit": "g"},
+      {"name": "Canela", "quantity": 1, "unit": "g"},
+      {"name": "Limón", "quantity": 5, "unit": "g"}
+    ]
+  },
+  {
+    "title": "Flan de huevo",
+    "description": "Flan casero de huevo y leche con caramelo.",
+    "time_minutes": 50,
+    "difficulty": "medium",
+    "calories": 300,
+    "categories": ["Postre"],
+    "image": "flan-huevo.jpg",
+    "instructions": "1. Precalienta el horno a 160 °C. 2. Calienta el azúcar con un poco de agua hasta obtener caramelo y repártelo en un molde pequeño resistente al horno. 3. Bate el huevo con la leche y el azúcar restante. 4. Vierte la mezcla en el molde. 5. Hornea al baño maría hasta que cuaje. 6. Enfría antes de desmoldar.",
+    "ingredients": [
+      {"name": "Huevo", "quantity": 1, "unit": "unit"},
+      {"name": "Leche", "quantity": 150, "unit": "ml"},
+      {"name": "Azúcar", "quantity": 25, "unit": "g"}
+    ]
+  },
+  {
+    "title": "Pan con tomate y jamón serrano",
+    "description": "Bocadito tradicional de pan crujiente, tomate, aceite de oliva y jamón serrano.",
+    "time_minutes": 10,
+    "difficulty": "easy",
+    "calories": 300,
+    "categories": ["Snack"],
+    "image": "pan-tomate-jamon.jpg",
+    "instructions": "1. Tuesta ligeramente el pan. 2. Ralla el tomate y extiéndelo sobre el pan. 3. Añade el aceite de oliva. 4. Coloca encima el jamón serrano y sirve.",
+    "ingredients": [
+      {"name": "Pan", "quantity": 1, "unit": "slice", "is_pantry_item": true},
+      {"name": "Tomate natural", "quantity": 60, "unit": "g"},
+      {"name": "Jamón serrano", "quantity": 30, "unit": "g"},
+      {"name": "Aceite de oliva", "quantity": 0.5, "unit": "tbsp", "is_pantry_item": true}
+    ]
+  },
+  {
+    "title": "Almendras tostadas",
+    "description": "Un tentempié sencillo de almendras tostadas con una pizca de sal.",
+    "time_minutes": 12,
+    "difficulty": "easy",
+    "calories": 175,
+    "categories": ["Snack"],
+    "image": "almendras-tostadas.jpg",
+    "instructions": "1. Precalienta el horno a 170 °C. 2. Extiende las almendras en una bandeja. 3. Tuéstalas durante unos 8-10 minutos, vigilando que no se quemen. 4. Deja enfriar y añade una pizca de sal si lo deseas.",
+    "ingredients": [
+      {"name": "Almendras", "quantity": 30, "unit": "g"}
+    ]
+  }
+]
