@@ -3,7 +3,7 @@ import { useMealPlan } from "../context/MealPlanContext";
 import { useTheme } from "../context/ThemeContext";
 import ShoppingList from "./ShoppingList";
 
-export default function MealPlanModal({ onClose }) {
+export default function MealPlanModal({ onClose, onOpenRecipe }) {
   const {
     recipes,
     removeRecipe,
@@ -78,13 +78,45 @@ export default function MealPlanModal({ onClose }) {
                     alignItems: "center",
                   }}
                 >
-                  <span
+                  <button
+                    onClick={() => onOpenRecipe(recipe)}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.borderColor = theme.primary;
+                      e.currentTarget.style.background = theme.surface;
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.borderColor = theme.border;
+                      e.currentTarget.style.background = "transparent";
+                    }}
                     style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      width: "100%",
+                      padding: "12px 14px",
+                      border: `1px solid ${theme.border}`,
+                      borderRadius: "10px",
+                      background: "transparent",
+                      color: theme.text,
+                      cursor: "pointer",
                       fontWeight: "600",
+                      fontSize: "15px",
+                      textAlign: "left",
+                      transition: "background 0.2s, border-color 0.2s",
                     }}
                   >
-                    {recipe.title}
-                  </span>
+                    <span>🍽️ {recipe.title}</span>
+                    <span
+                      style={{
+                        color: theme.primary,
+                        fontSize: "20px",
+                        marginLeft: "10px",
+                      }}
+                      aria-hidden="true"
+                    >
+                      ›
+                    </span>
+                  </button>
 
                   <button
                     onClick={() =>

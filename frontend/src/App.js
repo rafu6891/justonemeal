@@ -170,6 +170,7 @@ function App() {
       {showMealPlan && (
           <MealPlanModal
               onClose={() => setShowMealPlan(false)}
+              onOpenRecipe={(recipe) => setSelectedRecipe(recipe)}
           />
       )}
       <Footer />
