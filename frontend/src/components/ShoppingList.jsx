@@ -51,42 +51,88 @@ export default function ShoppingList({
   const pantryIngredients = Object.values(pantryList);
 
   const shareShoppingList = async () => {
-    const shoppingText = shoppingIngredients
-      .map((ingredient) =>
-        ingredient.to_taste
-          ? `• ${ingredient.name} al gusto`
-          : `• ${ingredient.quantity} ${ingredient.unit_display} ${ingredient.name}`
-      )
-      .join("\n");
+  const shoppingText = shoppingIngredients
+    .map((ingredient) =>
+      ingredient.to_taste
+        ? `• ${ingredient.name} al gusto`
+        : `• ${ingredient.quantity} ${ingredient.unit_display} ${ingredient.name}`
+    )
+    .join("\n");
 
-    const pantryText = pantryIngredients
-      .map((ingredient) =>
-        ingredient.to_taste
-          ? `• ${ingredient.name} al gusto`
-          : `• ${ingredient.quantity} ${ingredient.unit_display} ${ingredient.name}`
-      )
-      .join("\n");
+  const pantryText = pantryIngredients
+    .map((ingredient) =>
+      ingredient.to_taste
+        ? `• ${ingredient.name} al gusto`
+        : `• ${ingredient.quantity} ${ingredient.unit_display} ${ingredient.name}`
+    )
+    .join("\n");
 
-    let text = "🛒 Lista de la compra\n\n";
+  let text = "🛒 Lista de la compra\n\n";
 
-    if (shoppingText) {
-      text += `🛒 Compra\n${shoppingText}`;
-    }
+  if (shoppingText) {
+    text += `🛒 Compra\n${shoppingText}`;
+  }
 
-    if (pantryText) {
-      text += `\n\n🧂 Productos de despensa\n${pantryText}`;
-    }
+  if (pantryText) {
+    text += `\n\n🧂 Productos de despensa\n${pantryText}`;
+  }
 
-    if (navigator.share) {
-      await navigator.share({
-        title: "Lista de la compra - JustOneMeal",
-        text: text,
-      });
-    } else {
-      await navigator.clipboard.writeText(text);
-      alert("Lista copiada al portapapeles");
-    }
-  };
+  if (navigator.share) {
+    await navigator.share({
+      title: "Lista de la compra - JustOneMeal",
+      text: text,
+    });
+  } else {
+    await navigator.clipboard.writeText(text);
+    alert("Lista copiada al portapapeles");
+  }
+};
+
+const shareWhatsApp = () => {
+  const shoppingText = shoppingIngredients
+    .filter((ingredient) => {
+      const key = `shopping-${ingredient.name}-${ingredient.unit}`;
+      return !checkedIngredients[key];
+    })
+    .map((ingredient) =>
+      ingredient.to_taste
+        ? `☐ ${ingredient.name} al gusto`
+        : `☐ ${ingredient.quantity} ${ingredient.unit_display} ${ingredient.name}`
+    )
+    .join("\n");
+
+  const pantryText = pantryIngredients
+    .filter((ingredient) => {
+      const key = `pantry-${ingredient.name}-${ingredient.unit}`;
+      return !checkedIngredients[key];
+    })
+    .map((ingredient) =>
+      ingredient.to_taste
+        ? `☐ ${ingredient.name} al gusto`
+        : `☐ ${ingredient.quantity} ${ingredient.unit_display} ${ingredient.name}`
+    )
+    .join("\n");
+
+  let text = "🛒 *Lista de la compra - JustOneMeal*\n\n";
+
+  if (shoppingText) {
+    text += `🛒 *Compra*\n${shoppingText}`;
+  }
+
+  if (pantryText) {
+    text += `\n\n🧂 *Productos de despensa*\n${pantryText}`;
+  }
+
+  const isMobile = /Android|iPhone|iPad|iPod/i.test(
+    navigator.userAgent
+  );
+
+  const url = isMobile
+    ? `https://wa.me/?text=${encodeURIComponent(text)}`
+    : `https://web.whatsapp.com/send?text=${encodeURIComponent(text)}`;
+
+  window.open(url, "_blank", "noopener,noreferrer");
+};
 
   return (
     <div
@@ -245,7 +291,24 @@ export default function ShoppingList({
             </ul>
           </>
         )}
-
+        
+        <button
+          onClick={shareWhatsApp}
+          style={{
+            width: "100%",
+            marginTop: "15px",
+            padding: "14px",
+            border: "none",
+            borderRadius: "12px",
+            background: "#25D366",
+            color: "white",
+            cursor: "pointer",
+            fontWeight: "bold",
+            fontSize: "15px",
+          }}
+        >
+          🟢 Compartir por WhatsApp
+        </button>
         <button
           onClick={shareShoppingList}
           style={{

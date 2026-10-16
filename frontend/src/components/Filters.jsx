@@ -2,6 +2,8 @@ import { useTheme } from "../context/ThemeContext";
 export default function Filters({
   search,
   setSearch,
+  searchType,
+  setSearchType,
   fetchRecipes,
   difficulty,
   setDifficulty,
@@ -9,6 +11,7 @@ export default function Filters({
   setCategory,
   order,
   setOrder,
+  onClearFilters,
 }) {
   const { theme } = useTheme();
   
@@ -49,6 +52,17 @@ export default function Filters({
         onChange={(e) => setSearch(e.target.value)}
         style={inputStyle}
       />
+      
+      <select
+        value={searchType}
+        onChange={(e) => setSearchType(e.target.value)}
+        style={selectStyle}
+        aria-label="Buscar por"
+      >
+        <option value="name">Por nombre</option>
+        <option value="ingredient">Por ingrediente</option>
+      </select>
+      
 
       <button
         onClick={() => fetchRecipes()}
@@ -100,6 +114,21 @@ export default function Filters({
         <option value="time_minutes">Tiempo preparación ⏱</option>
         <option value="title">Título A-Z</option>
       </select>
+      <button
+        onClick={onClearFilters}
+        style={{
+          padding: "12px 16px",
+          borderRadius: "10px",
+          border: `1px solid ${theme.border}`,
+          backgroundColor: theme.surface,
+          color: theme.text,
+          cursor: "pointer",
+          fontSize: "15px",
+          fontWeight: "bold",
+        }}
+      >
+        🧹 Limpiar filtros
+      </button>
     </div>
   );
 }

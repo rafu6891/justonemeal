@@ -15,6 +15,7 @@ import Footer from "./components/Footer";
 function App() {
   const [recipes, setRecipes] = useState([]);
   const [search, setSearch] = useState("");
+  const [searchType, setSearchType] = useState("name");
   const [difficulty, setDifficulty] = useState("");
   const [order, setOrder] = useState("");
   const [selectedRecipe, setSelectedRecipe] = useState(null);
@@ -43,7 +44,8 @@ function App() {
       }
 
       if (search) {
-        params.push(`search=${search}`);
+        params.push(`search=${encodeURIComponent(search)}`);
+        params.push(`search_type=${searchType}`);
       }
 
       if (difficulty) {
@@ -98,6 +100,13 @@ function App() {
   }, [search, difficulty, category, order]);
 
   const { theme, darkMode, setDarkMode } = useTheme();
+  const clearFilters = () => {
+    setSearch("");
+    setDifficulty("");
+    setCategory("");
+    setOrder("");
+    setPageNumber(1);
+  };
 
 
   return (
@@ -121,6 +130,8 @@ function App() {
       <Filters
         search={search}
         setSearch={setSearch}
+        searchType={searchType}
+        setSearchType={setSearchType}
         fetchRecipes={fetchRecipes}
         difficulty={difficulty}
         setDifficulty={setDifficulty}
@@ -128,6 +139,7 @@ function App() {
         setCategory={setCategory}
         order={order}
         setOrder={setOrder}
+        onClearFilters={clearFilters}
       />
 
       {/* 🔹 recetas */}

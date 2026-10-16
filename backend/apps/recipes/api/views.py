@@ -106,6 +106,7 @@ class RecipeListAPIView(APIView):
         exclude_param = request.GET.get("exclude")
         ingredient_all_param = request.GET.get("ingredient_all")
         search = request.GET.get("search")
+        search_type = request.GET.get("search_type", "name")
         order = request.GET.get("order")
 
         if difficulty:
@@ -149,7 +150,12 @@ class RecipeListAPIView(APIView):
                     ingredients__ingredient__name__icontains=ex
                 )
         if search:
-            recipes = recipes.filter(title__icontains=search)
+            if search_type == "ingredient":
+                recipes = recipes.filter(
+                    ingredients__ingredient__name__icontains=search
+                ).distinct()
+            else:
+                recipes = recipes.filter(title__icontains=search)
 
         allowed_order_fields = [
             "title",
