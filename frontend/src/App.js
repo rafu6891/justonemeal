@@ -1,4 +1,8 @@
+
 import { useEffect, useState } from "react";
+import { Routes, Route, useNavigate } from "react-router-dom";
+
+import RecipePage from "./pages/RecipePage";
 import RecipeModal from "./components/RecipeModal";
 import RecipeCard from "./components/RecipeCard";
 import Header from "./components/Header";
@@ -11,8 +15,9 @@ import MealPlanModal from "./components/MealPlanModal";
 import TopBar from "./components/TopBar";
 import Footer from "./components/Footer";
 
-
 function App() {
+  const navigate = useNavigate();
+
   const [recipes, setRecipes] = useState([]);
   const [search, setSearch] = useState("");
   const [searchType, setSearchType] = useState("name");
@@ -25,16 +30,15 @@ function App() {
   const [previousPage, setPreviousPage] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  
+
+  const { theme } = useTheme();
 
   const fetchRecipes = (page = null) => {
     let url;
 
-    // Si recibimos una URL (nextPage o previousPage)
     if (typeof page === "string") {
       url = page;
     } else {
-      // URL base
       url = `${API_URL}/recipes/`;
 
       const params = [];
@@ -66,50 +70,58 @@ function App() {
     }
 
     fetch(url)
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Error al cargar las recetas");
+        }
+        return res.json();
+      })
       .then((data) => {
         setRecipes(data.results || []);
         setNextPage(data.next);
         setPreviousPage(data.previous);
-        setTotalPages(Math.ceil(data.count / PAGE_SIZE));
+        setTotalPages(Math.ceil((data.count || 0) / PAGE_SIZE));
       })
       .catch((err) => console.error(err));
   };
 
-
   const likeRecipe = (recipeId) => {
-  fetch(`${API_URL}/recipes/${recipeId}/like/`, {
-    method: "POST",
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      setRecipes((prev) =>
-        prev.map((recipe) =>
-          recipe.id === recipeId
-            ? { ...recipe, likes: data.likes }
-            : recipe
-        )
-      );
+    fetch(`${API_URL}/recipes/${recipeId}/like/`, {
+      method: "POST",
     })
-    .catch((err) => console.error(err));
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Error al dar me gusta");
+        }
+        return res.json();
+      })
+      .then((data) => {
+        setRecipes((prev) =>
+          prev.map((recipe) =>
+            recipe.id === recipeId
+              ? { ...recipe, likes: data.likes }
+              : recipe
+          )
+        );
+      })
+      .catch((err) => console.error(err));
   };
 
   useEffect(() => {
     fetchRecipes(1);
     setPageNumber(1);
-  }, [search, difficulty, category, order]);
+  }, [search, searchType, difficulty, category, order]);
 
-  const { theme, darkMode, setDarkMode } = useTheme();
   const clearFilters = () => {
     setSearch("");
+    setSearchType("name");
     setDifficulty("");
     setCategory("");
     setOrder("");
     setPageNumber(1);
   };
 
-
-  return (
+  const HomePage = () => (
     <div
       style={{
         padding: "20px",
@@ -119,14 +131,10 @@ function App() {
         fontFamily: "Arial",
       }}
     >
-      <TopBar
-        onOpenMealPlan={() => setShowMealPlan(true)}
-      />
+      <TopBar onOpenMealPlan={() => setShowMealPlan(true)} />
 
       <Header recipes={recipes} />
 
-
-      {/* 🔹 buscador + filtros */}
       <Filters
         search={search}
         setSearch={setSearch}
@@ -142,7 +150,6 @@ function App() {
         onClearFilters={clearFilters}
       />
 
-      {/* 🔹 recetas */}
       <div
         style={{
           display: "grid",
@@ -151,18 +158,17 @@ function App() {
           alignItems: "start",
         }}
       >
-       {recipes.map((recipe) => (
+        {recipes.map((recipe) => (
           <RecipeCard
             key={recipe.id}
             recipe={recipe}
-            onOpen={setSelectedRecipe}
+            onOpen={() => navigate(`/receta/${recipe.id}`)}
             likeRecipe={likeRecipe}
             getCategoryIcon={getCategoryIcon}
           />
-        ))} 
+        ))}
       </div>
 
-      {/* 🔹 paginacion */}
       <Pagination
         pageNumber={pageNumber}
         totalPages={totalPages}
@@ -172,23 +178,26 @@ function App() {
         setPageNumber={setPageNumber}
       />
 
-      {selectedRecipe && (
-        <RecipeModal
-          recipe={selectedRecipe}
-          onClose={() => setSelectedRecipe(null)}
+      {showMealPlan && (
+        <MealPlanModal
+          onClose={() => setShowMealPlan(false)}
+          onOpenRecipe={(recipe) => {
+            setShowMealPlan(false);
+            navigate(`/receta/${recipe.id}`);
+          }}
         />
       )}
 
-      {showMealPlan && (
-          <MealPlanModal
-              onClose={() => setShowMealPlan(false)}
-              onOpenRecipe={(recipe) => setSelectedRecipe(recipe)}
-          />
-      )}
       <Footer />
     </div>
   );
-  
+
+  return (
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/receta/:id" element={<RecipePage />} />
+    </Routes>
+  );
 }
 
 export default App;

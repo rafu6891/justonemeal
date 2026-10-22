@@ -13,7 +13,7 @@ from django.utils.decorators import method_decorator
 
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework import status
-from django.shortcuts import get_object_or_404
+
 
 
 
@@ -23,14 +23,15 @@ class RecipePagination(PageNumberPagination):
 
     
 class RecipeDetailAPIView(APIView):
+    
     def get(self, request, recipe_id):
         try:
             servings = int(request.GET.get("servings", 1))
         except ValueError:
             servings = 1
-        
+
         servings = max(1, min(servings, 6))
-        
+
         recipe = get_object_or_404(Recipe, id=recipe_id)
 
         ingredients = []
@@ -38,21 +39,36 @@ class RecipeDetailAPIView(APIView):
             ingredients.append({
                 "name": ri.ingredient.name,
                 "quantity": ri.quantity_for(servings),
-                "unit": "" if ri.ingredient.to_taste else ri.ingredient.unit,
+                "unit": ri.ingredient.unit,
+                "unit_display": ri.ingredient.get_unit_display(),
+                "to_taste": ri.ingredient.to_taste,
+                "is_pantry_item": ri.ingredient.is_pantry_item,
             })
-        
+
         data = {
             "id": recipe.id,
             "title": recipe.title,
+            "image": (
+                request.build_absolute_uri(recipe.image.url)
+                if recipe.image
+                else None
+            ),
+            "description": recipe.description,
+            "instructions": recipe.instructions,
             "time_minutes": recipe.time_minutes,
             "calories": recipe.calories,
             "difficulty": recipe.difficulty,
+            "likes": recipe.likes,
+            "categories": [
+                category.name
+                for category in recipe.categories.all()
+            ],
             "servings": servings,
             "ingredients": ingredients,
         }
 
-        serializer = RecipeDetailSerializer(data)
-        return Response(serializer.data)
+        return Response(data)
+
    
 @extend_schema(
     parameters=[
