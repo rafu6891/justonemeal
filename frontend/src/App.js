@@ -1,14 +1,18 @@
-
 import { useEffect, useState } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 
 import RecipePage from "./pages/RecipePage";
-import RecipeModal from "./components/RecipeModal";
 import RecipeCard from "./components/RecipeCard";
 import Header from "./components/Header";
 import Filters from "./components/Filters";
 import Pagination from "./components/Pagination";
-import { API_URL, PAGE_SIZE } from "./config";
+
+import {
+  API_URL,
+  PAGE_SIZE_DESKTOP,
+  PAGE_SIZE_MOBILE,
+} from "./config";
+
 import { getCategoryIcon } from "./utils/recipeHelpers";
 import { useTheme } from "./context/ThemeContext";
 import MealPlanModal from "./components/MealPlanModal";
@@ -18,21 +22,43 @@ import Footer from "./components/Footer";
 function App() {
   const navigate = useNavigate();
 
+  // Detectar si estamos en móvil
+  const [isMobile, setIsMobile] = useState(
+    window.innerWidth <= 768
+  );
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  const pageSize = isMobile
+    ? PAGE_SIZE_MOBILE
+    : PAGE_SIZE_DESKTOP;
+
   const [recipes, setRecipes] = useState([]);
   const [search, setSearch] = useState("");
   const [searchType, setSearchType] = useState("name");
   const [difficulty, setDifficulty] = useState("");
   const [order, setOrder] = useState("");
-  const [selectedRecipe, setSelectedRecipe] = useState(null);
   const [showMealPlan, setShowMealPlan] = useState(false);
   const [category, setCategory] = useState("");
   const [nextPage, setNextPage] = useState(null);
   const [previousPage, setPreviousPage] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [totalRecipes, setTotalRecipes] = useState(0);
 
   const { theme } = useTheme();
 
+  // Cargar recetas
   const fetchRecipes = (page = null) => {
     let url;
 
@@ -46,6 +72,8 @@ function App() {
       if (page) {
         params.push(`page=${page}`);
       }
+
+      params.push(`page_size=${pageSize}`);
 
       if (search) {
         params.push(`search=${encodeURIComponent(search)}`);
@@ -64,9 +92,7 @@ function App() {
         params.push(`order=${order}`);
       }
 
-      if (params.length > 0) {
-        url += `?${params.join("&")}`;
-      }
+      url += `?${params.join("&")}`;
     }
 
     fetch(url)
@@ -74,17 +100,22 @@ function App() {
         if (!res.ok) {
           throw new Error("Error al cargar las recetas");
         }
+
         return res.json();
       })
       .then((data) => {
         setRecipes(data.results || []);
+        setTotalRecipes(data.count || 0);
         setNextPage(data.next);
         setPreviousPage(data.previous);
-        setTotalPages(Math.ceil((data.count || 0) / PAGE_SIZE));
+        setTotalPages(
+          Math.ceil((data.count || 0) / pageSize)
+        );
       })
       .catch((err) => console.error(err));
   };
 
+  // Dar me gusta
   const likeRecipe = (recipeId) => {
     fetch(`${API_URL}/recipes/${recipeId}/like/`, {
       method: "POST",
@@ -93,6 +124,7 @@ function App() {
         if (!res.ok) {
           throw new Error("Error al dar me gusta");
         }
+
         return res.json();
       })
       .then((data) => {
@@ -107,11 +139,20 @@ function App() {
       .catch((err) => console.error(err));
   };
 
+  // Recargar al cambiar filtros o tamaño de pantalla
   useEffect(() => {
     fetchRecipes(1);
     setPageNumber(1);
-  }, [search, searchType, difficulty, category, order]);
+  }, [
+    search,
+    searchType,
+    difficulty,
+    category,
+    order,
+    pageSize,
+  ]);
 
+  // Limpiar filtros
   const clearFilters = () => {
     setSearch("");
     setSearchType("name");
@@ -121,6 +162,7 @@ function App() {
     setPageNumber(1);
   };
 
+  // Página principal
   const HomePage = () => (
     <div
       style={{
@@ -133,7 +175,7 @@ function App() {
     >
       <TopBar onOpenMealPlan={() => setShowMealPlan(true)} />
 
-      <Header recipes={recipes} />
+      <Header totalRecipes={totalRecipes} />
 
       <Filters
         search={search}
@@ -153,7 +195,8 @@ function App() {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+          gridTemplateColumns:
+            "repeat(auto-fill, minmax(280px, 1fr))",
           gap: "25px",
           alignItems: "start",
         }}

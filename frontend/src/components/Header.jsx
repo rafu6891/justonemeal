@@ -2,16 +2,14 @@ import { useTheme } from "../context/ThemeContext";
 import { useMealPlan } from "../context/MealPlanContext";
 
 export default function Header({
-    recipes,
-    onOpenMealPlan,
+  totalRecipes = 0,
+  onOpenMealPlan,
 }) {
   const { theme, darkMode, setDarkMode } = useTheme();
-  const {
-            recipes: mealPlan,
-        } = useMealPlan();
+
+  const { recipes: mealPlan } = useMealPlan();
 
   return (
-
     <div
       className="app-header"
       style={{
@@ -35,7 +33,6 @@ export default function Header({
         boxShadow: theme.shadow,
       }}
     >
-
       <img
         className="app-header-logo"
         src="/images/logo-jom-icon.png"
@@ -71,16 +68,16 @@ export default function Header({
         Recetas sencillas para cualquier día.
       </p>
 
-<div
-  style={{
-    marginTop: "25px",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    gap: "18px",
-  }}
->
       <div
+        style={{
+          marginTop: "25px",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: "18px",
+        }}
+      >
+        <div
           style={{
             display: "inline-block",
             backgroundColor: "rgba(255,255,255,0.25)",
@@ -91,7 +88,7 @@ export default function Header({
             color: "#3b2a1a",
           }}
         >
-          {recipes.length} recetas disponibles
+          {totalRecipes} recetas disponibles
         </div>
       </div>
     </div>
